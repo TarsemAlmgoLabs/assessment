@@ -13,8 +13,16 @@ import {
   Mic, Camera
 } from "lucide-react";
 import { AssessmentContext } from "../context/assessments.context";
+import { useSearchParams } from "next/navigation";
 
 export default function AssessmentRules() {
+
+  const searchParams = useSearchParams();
+
+  const title = searchParams.get("title");
+  const exp = searchParams.get("exp");
+  const skills = searchParams.get("skills")?.split(",") || [];
+  const assessmentId = searchParams.get("assessmentId");
 
   const {testModeSet, testMode} = AssessmentContext()
   const [micEnabled, setMicEnabled] = useState(false);
@@ -385,7 +393,7 @@ export default function AssessmentRules() {
           </Link>
 
           <Link
-            href={"assessment-portal"}
+            href={`/assessment-portal?title=${encodeURIComponent(title)}&exp=${encodeURIComponent(exp)}&skills=${encodeURIComponent(skills.join(","))}&assessmentId=${encodeURIComponent(assessmentId)}`}
             className="
               flex items-center justify-center gap-2
               rounded-xl bg-cyan-400

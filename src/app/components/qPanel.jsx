@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   ArrowLeft,
   ArrowRight,
@@ -94,6 +94,10 @@ const questions = [
 ];
 
 export default function CBTExam() {
+
+
+
+
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState({});
   const [marked, setMarked] = useState({});
