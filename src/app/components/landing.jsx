@@ -185,12 +185,20 @@ export default function CandidateAssessments() {
     loading,
     setLoading,
     Assessments,
-    fetchAssessments
+    fetchAssessments,
+    userData,
+    FilterAssessments,
+    filterAssessmentsFun
+    
   } = AssessmentContext();
 
   useEffect(el=>{
     fetchAssessments()
   },[])
+
+  function onSearch(el){
+    filterAssessmentsFun(Assessments, el.target.value)
+  }
 
   return (
     <section className="relative min-h-screen overflow-hidden bg-[#0b1016] px-6 py-16 text-white md:px-10 lg:px-16">
@@ -213,6 +221,26 @@ export default function CandidateAssessments() {
             >
             Old Assessments
         </Link>
+
+       <button
+        className="
+          fixed left-6 top-6 z-50
+          rounded-xl
+          border border-yellow-400/30
+          bg-gradient-to-r from-yellow-500/20 to-amber-400/10
+          px-4 py-2.5
+          text-xs font-bold text-yellow-300
+          shadow-lg shadow-yellow-500/10
+          backdrop-blur-xl
+          transition-all duration-200
+          hover:border-yellow-400/60
+          hover:bg-yellow-400/20
+          hover:text-yellow-200
+          hover:shadow-yellow-500/20
+        "
+      >
+        {userData.tier.toUpperCase()} USER
+      </button>
 
       {/* Grid Background */}
       <div
@@ -254,12 +282,12 @@ export default function CandidateAssessments() {
           {/* Stats */}
           <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
 
-            <div className="rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-sm text-slate-400">
+            {/* <div className="rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-sm text-slate-400">
               <span className="font-bold text-white">
                 {Assessments.length}
               </span>{" "}
               Assessments
-            </div>
+            </div> */}
 
             {/* <div className="rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-sm text-slate-400">
               <span className="font-bold text-cyan-400">5</span> Skills
@@ -278,12 +306,13 @@ export default function CandidateAssessments() {
             <Search size={17} className="shrink-0 text-cyan-400" />
 
             <input
+                onChange={el=> onSearch(el)}
                 type="text"
                 placeholder="Search assessments..."
                 className="w-full bg-transparent text-sm text-slate-200 outline-none placeholder:text-slate-500"
             />
             </div>
-          {Assessments.map((assessment) => (
+          {FilterAssessments.map((assessment) => (
             <AssessmentCard
               key={assessment.id}
               assessment={assessment}

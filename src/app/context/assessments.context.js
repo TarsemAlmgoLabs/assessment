@@ -95,6 +95,8 @@ const assessments = [
 export const AppProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [Assessments, setAssessments] = useState([]);
+  const [FilterAssessments, setFilterAssessments] = useState([]);
+
   const [authenticated, setAuthenticated] = useState(false);
   const [authorized, setAuthorized] = useState(false);
   const [userData, setUserData] = useState({
@@ -109,6 +111,11 @@ export const AppProvider = ({ children }) => {
 
       // console.log(response.data);
       setAuthenticated(authenticated=> true);
+      setUserData((userData) => ({
+        ...userData,
+        fname: "tarsem",
+        email: "ts6346298@gmail.com",
+      }));
     }catch(error){
       console.error("Failed to fetch assessments:", error);
 
@@ -120,6 +127,10 @@ export const AppProvider = ({ children }) => {
       // const response = await axios.get("/api/authorization");
 
       // console.log(response.data);
+      setUserData((userData) => ({
+        ...userData,
+        tier : "gold",
+      }));
       setAuthorized(authorized=> true);
     }catch(error){
       console.error("Failed to fetch assessments:", error);
@@ -133,17 +144,35 @@ export const AppProvider = ({ children }) => {
 
       // console.log(response.data);
       setAssessments(Assessments=> assessments);
-      return response.data;
+      setFilterAssessments(filterAssessments=> assessments)
+      return assessments;
     } catch (error) {
       console.error("Failed to fetch assessments:", error);
     }
   };
 
+  const filterAssessmentsFun = async(assessments, text)=>{
+    const newAssessments = assessments.filter(el=>{
+      if(el.title.toLowerCase().includes(text.toLowerCase())){
+        return el;
+      }
+    })
+
+    setFilterAssessments(FilterAssessments=> newAssessments);
+  }
+
   const value = {
     loading,
     setLoading,
     Assessments,
-    fetchAssessments
+    fetchAssessments,
+    Authentication,
+    Authorization,
+    authenticated,
+    authorized,
+    userData,
+    FilterAssessments,
+    filterAssessmentsFun
   };
 
   return (
