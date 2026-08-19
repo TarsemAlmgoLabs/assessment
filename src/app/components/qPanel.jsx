@@ -16,86 +16,26 @@ import {
   Sun,
   X,
 } from "lucide-react";
-
-const questions = [
-  {
-    id: 1,
-    question:
-      "Which of the following is used to declare a constant in JavaScript?",
-    options: ["var", "let", "const", "static"],
-    answer: 2,
-  },
-  {
-    id: 2,
-    question: "What does the === operator check in JavaScript?",
-    options: [
-      "Only value",
-      "Only type",
-      "Value and type",
-      "Reference only",
-    ],
-    answer: 2,
-  },
-  {
-    id: 3,
-    question:
-      "Which method is used to create a new array by transforming every element?",
-    options: ["filter()", "map()", "reduce()", "forEach()"],
-    answer: 1,
-  },
-  {
-    id: 4,
-    question: "Which of the following is NOT a JavaScript primitive type?",
-    options: ["String", "Boolean", "Object", "Number"],
-    answer: 2,
-  },
-  {
-    id: 5,
-    question: "What will typeof null return in JavaScript?",
-    options: ["null", "undefined", "object", "boolean"],
-    answer: 2,
-  },
-  {
-    id: 6,
-    question: "Which keyword is used to handle errors in JavaScript?",
-    options: ["catch", "error", "handle", "exception"],
-    answer: 0,
-  },
-  {
-    id: 7,
-    question:
-      "Which function converts a JSON string into a JavaScript object?",
-    options: [
-      "JSON.parse()",
-      "JSON.stringify()",
-      "JSON.object()",
-      "JSON.convert()",
-    ],
-    answer: 0,
-  },
-  {
-    id: 8,
-    question: "What is the output of Boolean(0) in JavaScript?",
-    options: ["true", "false", "undefined", "null"],
-    answer: 1,
-  },
-  {
-    id: 9,
-    question: "Which array method removes the last element?",
-    options: ["shift()", "remove()", "pop()", "delete()"],
-    answer: 2,
-  },
-  {
-    id: 10,
-    question: "Which statement is used to exit a loop immediately?",
-    options: ["stop", "exit", "break", "return"],
-    answer: 2,
-  },
-];
+import { useSearchParams } from "next/navigation";
+import { useQportal } from "../context/qportal.context";
 
 export default function CBTExam() {
+  const searchParams = useSearchParams();
 
-
+  const title = searchParams.get("title");
+  const exp = searchParams.get("exp");
+  const skills = searchParams.get("skills")?.split(",") || [];
+  const assessmentId = searchParams.get("assessmentId");
+  
+  const {loading,
+    setLoading,
+    questions,
+    loadAssessment} = useQportal();
+  
+  useEffect(el=>{
+    loadAssessment(title,exp,skills,assessmentId)
+  }, [])
+  
 
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -108,7 +48,7 @@ export default function CBTExam() {
 
   const isDark = theme === "dark";
 
-  const question = questions[currentQuestion];
+  const question = questions?.[currentQuestion];
 
   const answeredCount = Object.keys(answers).length;
   const markedCount = Object.keys(marked).length;
@@ -116,7 +56,7 @@ export default function CBTExam() {
   const selectAnswer = (optionIndex) => {
     setAnswers((prev) => ({
       ...prev,
-      [question.id]: optionIndex,
+      [question?.id]: optionIndex,
     }));
   };
 
@@ -704,7 +644,7 @@ export default function CBTExam() {
                     }
                   `}
                 >
-                  {question.id}
+                  {question?.id}
                 </div>
 
                 <div>
@@ -721,7 +661,7 @@ export default function CBTExam() {
                       isDark ? "text-white" : "text-slate-900"
                     }`}
                   >
-                    {question.id} of {questions.length}
+                    {question?.id} of {questions.length}
                   </p>
                 </div>
               </div>
@@ -780,15 +720,21 @@ export default function CBTExam() {
                       }
                     `}
                   >
-                    {question.question}
+                    {question?.question}
                   </h2>
+                </div>
+
+                <div className="w-full mt-4 overflow-x-auto rounded-xl border border-gray-800 bg-[#0d1117] p-5">
+                  <pre className="m-0 whitespace-pre-wrap break-words font-mono text-sm leading-6 text-gray-300">
+                    {question?.codeSnippet}
+                  </pre>
                 </div>
 
                 {/* Options */}
                 {/* Options */}
                 <div className="mt-7 grid w-full max-w-5xl grid-cols-2 gap-3 sm:mt-9 sm:gap-4">
 
-                {question.options.map((option, index) => {
+                {question?.options.map((option, index) => {
                     const isSelected = answers[question.id] === index;
 
                     return (
