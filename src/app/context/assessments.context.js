@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 const assessments = [
   {
-    id: 1,
+    _id: 1,
     title: "JavaScript Assessment",
     description:
       "Test your knowledge of JavaScript fundamentals, ES6+, async programming and modern patterns.",
@@ -30,9 +30,10 @@ const assessments = [
     experience: "1-2 year",
     icon: Code2,
     status: "Available",
+    skills: ["react.js", "next.js", "mongodb", "sql"]
   },
   {
-    id: 2,
+    _id: 2,
     title: "React.js Assessment",
     description:
       "Evaluate your React skills including hooks, state management, components and performance.",
@@ -42,21 +43,25 @@ const assessments = [
     experience: "1-2 year",
     icon: BrainCircuit,
     status: "Available",
+    skills: ["react.js", "next.js", "mongodb", "sql"]
+
   },
   {
-    id: 3,
+    _id: 3,
     title: "Node.js & Express",
     description:
-      "Demonstrate your backend expertise with Node.js, Express, APIs, middleware and architecture.",
+      "Demonstrate your backend expertise with Node.js, Express, APIs, m_iddleware and architecture.",
     category: "Backend",
     duration: "40 min",
     questions: 40,
     experience: "1-2 year",
     icon: Gauge,
     status: "Available",
+    skills: ["react.js", "next.js", "mongodb", "sql"]
+
   },
   {
-    id: 4,
+    _id: 4,
     title: "MongoDB Assessment",
     description:
       "Test database design, aggregation, indexing, queries and MongoDB best practices.",
@@ -66,9 +71,11 @@ const assessments = [
     experience: "1-2 year",
     icon: FileText,
     status: "Available",
+    skills: ["react.js", "next.js", "mongodb", "sql"]
+
   },
   {
-    id: 5,
+    _id: 5,
     title: "Problem Solving & DSA",
     description:
       "Solve algorithmic problems covering arrays, strings, trees, graphs and optimization.",
@@ -78,9 +85,11 @@ const assessments = [
     experience: "1-2 year",
     icon: BrainCircuit,
     status: "Available",
+    skills: ["react.js", "next.js", "mongodb", "sql"]
+
   },
   {
-    id: 6,
+    _id: 6,
     title: "Communication Skills",
     description:
       "Assess your professional communication, workplace collaboration and problem explanation.",
@@ -90,6 +99,8 @@ const assessments = [
     experience: "1-2 year",
     icon: Users,
     status: "Available",
+    skills: ["react.js", "next.js", "mongodb", "sql"]
+
   },
 ];
 export const AppProvider = ({ children }) => {
@@ -104,6 +115,11 @@ export const AppProvider = ({ children }) => {
     tier : "gold",
     email : "ts6346298@gmail.com"
   })
+  const [testMode, SetTestMode] = useState('dark')
+
+  const testModeSet = (mode)=>{
+      SetTestMode(testMode=> mode)
+  }
 
   const Authentication = async()=>{
     try{
@@ -172,7 +188,9 @@ export const AppProvider = ({ children }) => {
     authorized,
     userData,
     FilterAssessments,
-    filterAssessmentsFun
+    filterAssessmentsFun,
+    testModeSet,
+    testMode
   };
 
   return (

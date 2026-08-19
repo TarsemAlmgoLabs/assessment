@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import React from "react";
+import { useEffect, useState, useRef} from "react";
 import {
   AlertCircle,
   ArrowLeft,
@@ -10,9 +10,73 @@ import {
   Flag,
   Info,
   ShieldCheck,
+  Mic, Camera
 } from "lucide-react";
+import { AssessmentContext } from "../context/assessments.context";
 
 export default function AssessmentRules() {
+
+  const {testModeSet, testMode} = AssessmentContext()
+  const [micEnabled, setMicEnabled] = useState(false);
+  const [cameraEnabled, setCameraEnabled] = useState(false);
+
+  const micStreamRef = useRef(null);
+  const cameraStreamRef = useRef(null);
+
+  // function testModeSetfun(mode){
+  //   testModeSet(mode)
+  // }
+
+  const handleMicrophone = async (checked) => {
+    if (checked) {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          audio: true,
+        });
+
+        micStreamRef.current = stream;
+        setMicEnabled(true);
+      } catch (error) {
+        console.error("Microphone permission denied:", error);
+        setMicEnabled(false);
+      }
+    } else {
+      micStreamRef.current?.getTracks().forEach((track) => track.stop());
+      micStreamRef.current = null;
+      setMicEnabled(false);
+    }
+  };
+
+  const handleCamera = async (checked) => {
+    if (checked) {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: true,
+        });
+
+        cameraStreamRef.current = stream;
+        setCameraEnabled(true);
+      } catch (error) {
+        console.error("Camera permission denied:", error);
+        setCameraEnabled(false);
+      }
+    } else {
+      cameraStreamRef.current?.getTracks().forEach((track) => track.stop());
+      cameraStreamRef.current = null;
+      setCameraEnabled(false);
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      micStreamRef.current?.getTracks().forEach((track) => track.stop());
+      cameraStreamRef.current?.getTracks().forEach((track) => track.stop());
+    };
+  }, []);
+
+  
+
+
   return (
     <div className="min-h-screen bg-[#080d13] text-white">
 
@@ -46,9 +110,59 @@ export default function AssessmentRules() {
             Before You Begin
           </p>
 
-          <h2 className="mt-2 text-2xl font-bold text-white sm:text-3xl">
-            Assessment Rules & Regulations
-          </h2>
+         <div className="mt-2 flex items-center justify-between gap-4">
+            <h2 className="text-2xl font-bold text-white sm:text-3xl">
+              Assessment Rules & Regulations
+            </h2>
+
+            {/* <div className="flex shrink-0 items-center gap-2 rounded-xl border border-white/10 bg-[#0d141e] p-1">
+              <span className="px-2 text-xs font-semibold text-slate-400 hidden sm:block">
+                Test Mode
+              </span>
+
+              <button
+                onClick={() => testModeSet("light")}
+                type="button"
+                className={
+                  testMode === "light"
+                    ? `
+                      rounded-lg bg-cyan-400/15 px-3 py-2
+                      text-xs font-semibold text-cyan-300
+                      ring-1 ring-cyan-400/20
+                    `
+                    : `
+                      rounded-lg px-3 py-2
+                      text-xs font-semibold text-slate-300
+                      transition-all duration-200
+                      hover:bg-white/10 hover:text-white
+                    `
+                }
+              >
+                ☀ Light
+              </button>
+
+              <button
+                onClick={() => testModeSet("dark")}
+                type="button"
+                className={
+                  testMode === "dark"
+                    ? `
+                      rounded-lg bg-cyan-400/15 px-3 py-2
+                      text-xs font-semibold text-cyan-300
+                      ring-1 ring-cyan-400/20
+                    `
+                    : `
+                      rounded-lg px-3 py-2
+                      text-xs font-semibold text-slate-300
+                      transition-all duration-200
+                      hover:bg-white/10 hover:text-white
+                    `
+                }
+              >
+                ☾ Dark
+              </button>
+            </div> */}
+          </div>
 
           <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
             Please read the following instructions carefully before
@@ -198,6 +312,59 @@ export default function AssessmentRules() {
 
         </div>
 
+       <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
+      {/* Microphone */}
+      <label className="flex cursor-pointer items-center justify-between rounded-xl border border-white/10 bg-[#0d141e] p-4 transition-all hover:border-cyan-400/30 hover:bg-cyan-400/5">
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-cyan-400/10 text-cyan-400">
+            <Mic size={20} />
+          </div>
+
+          <div>
+            <p className="text-sm font-semibold text-white">
+              Allow Microphone
+            </p>
+
+            <p className="mt-0.5 text-xs text-slate-500">
+              {micEnabled ? "Microphone enabled" : "Required for assessment"}
+            </p>
+          </div>
+        </div>
+
+        <input
+          type="checkbox"
+          checked={micEnabled}
+          onChange={(e) => handleMicrophone(e.target.checked)}
+          className="h-5 w-5 cursor-pointer accent-cyan-400"
+        />
+      </label>
+
+      {/* Camera */}
+      <label className="flex cursor-pointer items-center justify-between rounded-xl border border-white/10 bg-[#0d141e] p-4 transition-all hover:border-cyan-400/30 hover:bg-cyan-400/5">
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-cyan-400/10 text-cyan-400">
+            <Camera size={20} />
+          </div>
+
+          <div>
+            <p className="text-sm font-semibold text-white">
+              Allow Camera
+            </p>
+
+            <p className="mt-0.5 text-xs text-slate-500">
+              {cameraEnabled ? "Camera enabled" : "Required for proctoring"}
+            </p>
+          </div>
+        </div>
+
+        <input
+          type="checkbox"
+          checked={cameraEnabled}
+          onChange={(e) => handleCamera(e.target.checked)}
+          className="h-5 w-5 cursor-pointer accent-cyan-400"
+        />
+      </label>
+    </div>
         {/* Actions */}
         <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-between">
 

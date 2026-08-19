@@ -135,6 +135,33 @@ function AssessmentCard({ assessment }) {
         </p>
       </div>
 
+     <div className="mt-6">
+      <p className="mb-3 text-sm font-semibold text-slate-400">
+        Skills Required
+      </p>
+
+      <div className="flex flex-wrap gap-2">
+        {assessment.skills?.map((skill, index) => (
+          <div
+            key={index}
+            className="
+              rounded-lg
+              border border-cyan-400/15
+              bg-cyan-400/[0.06]
+              px-3 py-1.5
+              text-xs font-semibold
+              text-cyan-300
+              transition-all duration-200
+              hover:border-cyan-400/30
+              hover:bg-cyan-400/10
+            "
+          >
+            {skill}
+          </div>
+        ))}
+      </div>
+    </div>
+
       {/* Stats */}
       <div className="relative mt-5 flex items-center gap-5 border-t border-white/5 pt-4">
         <div className="flex items-center gap-2 text-sm text-slate-400">
@@ -150,7 +177,7 @@ function AssessmentCard({ assessment }) {
 
       {/* Button */}
       <Link
-        href={"/desclaimers"}
+        href={`/desclaimers?title=${assessment.title}&exp=${assessment.experience.split("year")[0]}&skills=${assessment.skills.join(",")}&assessmentId=${assessment._id}}`}
         disabled={assessment.status !== "Available"}
         className="relative mt-6 flex w-full items-center justify-center gap-2 rounded-xl border border-cyan-400/30 bg-cyan-400/10 py-3 text-sm font-bold text-cyan-300 transition-all duration-300 hover:border-cyan-300 hover:bg-cyan-400 hover:text-[#071118] hover:shadow-[0_0_25px_rgba(34,211,238,0.25)] disabled:cursor-not-allowed disabled:border-white/10 disabled:bg-white/5 disabled:text-slate-500 cursor-pointer"
       >
