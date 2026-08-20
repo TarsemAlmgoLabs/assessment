@@ -14,6 +14,7 @@ const Questions = [
     answer: 2,
     codeSnippet: `const PI = 3.14;
 console.log(PI);`,
+    time : "10"
   },
   {
     id: 2,
@@ -29,6 +30,8 @@ console.log(PI);`,
 const b = "10";
 
 console.log(a === b);`,
+    time : "10"
+
   },
   {
     id: 3,
@@ -41,6 +44,8 @@ console.log(a === b);`,
 const doubled = numbers.map((num) => num * 2);
 
 console.log(doubled);`,
+    time : "10"
+
   },
   {
     id: 4,
@@ -51,6 +56,8 @@ console.log(doubled);`,
 const isActive = true;
 const age = 24;
 const user = { name: "Tarsem" };`,
+    time : "10"
+
   },
   {
     id: 5,
@@ -60,6 +67,8 @@ const user = { name: "Tarsem" };`,
     codeSnippet: `const value = null;
 
 console.log(typeof value);`,
+    time : "10"
+
   },
   {
     id: 6,
@@ -72,6 +81,8 @@ console.log(typeof value);`,
 } catch (error) {
   console.log("Something went wrong");
 }`,
+    time : "10"
+
   },
   {
     id: 7,
@@ -89,6 +100,8 @@ console.log(typeof value);`,
 const user = JSON.parse(json);
 
 console.log(user.name);`,
+    time : "10"
+
   },
   {
     id: 8,
@@ -98,7 +111,10 @@ console.log(user.name);`,
     codeSnippet: `const value = 0;
 
 console.log(Boolean(value));`,
+    time : "10"
+
   },
+
   {
     id: 9,
     question: "Which array method removes the last element?",
@@ -109,6 +125,8 @@ console.log(Boolean(value));`,
 fruits.pop();
 
 console.log(fruits);`,
+    time : "10"
+
   },
   {
     id: 10,
@@ -122,6 +140,8 @@ console.log(fruits);`,
 
   console.log(i);
 }`,
+    time : "10"
+
   },
 ];
 
@@ -142,7 +162,7 @@ export const QportalProvider = ({ children }) => {
 
         setQuestions(questions=> Questions)
 
-        return response.data;
+        return Questions;
     } catch (error) {
         console.error("Failed to load assessment:", error);
 
