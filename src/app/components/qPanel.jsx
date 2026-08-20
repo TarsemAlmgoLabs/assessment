@@ -18,8 +18,11 @@ import {
 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useQportal } from "../context/qportal.context";
+import { useAntiCheat } from "../hooks/useAntiCheat";
 
 export default function CBTExam() {
+  useAntiCheat();
+  
   const searchParams = useSearchParams();
 
   const title = searchParams.get("title");

@@ -2,6 +2,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AppProvider } from "./context/assessments.context";
 import { QportalProvider } from "./context/qportal.context";
+import { ResultProvider } from "./context/Result.context";
+import { HistoryProvider } from "./context/history.context";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,9 +28,13 @@ export default function RootLayout({ children }) {
     >
       <body className="min-h-full flex flex-col">
         <QportalProvider>
-        <AppProvider>
-        {children}
-        </AppProvider>
+          <AppProvider>
+            <ResultProvider>
+              <HistoryProvider>
+                {children}
+              </HistoryProvider>
+            </ResultProvider>
+          </AppProvider>
         </QportalProvider>
       </body>
     </html>
