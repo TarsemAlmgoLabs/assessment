@@ -1340,8 +1340,11 @@ import {
 } from "lucide-react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useQportal } from "../context/qportal.context";
+import { useAntiCheat } from "../hooks/useAntiCheat";
 
 export default function CBTExam() {
+  useAntiCheat();
+  
   const searchParams = useSearchParams();
   const router = useRouter();
   const [isAnotherTabOpen, setIsAnotherTabOpen] = useState(false);
