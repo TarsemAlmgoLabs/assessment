@@ -1,0 +1,103 @@
+name: Deploy Frontend
+
+on:
+  push:
+    branches:
+      - main
+      - devserver
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: AssessmentCICD
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/github_actions
+          chmod 600 ~/.ssh/github_actions
+
+      - name: Deploy Dev Server
+        if: github.ref == 'refs/heads/devserver'
+        run: |
+          ssh -o StrictHostKeyChecking=no \
+              -i ~/.ssh/github_actions \
+              -p "${{ secrets.VPS_PORT }}" \
+              "${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }}" << 'EOF'
+
+          set -e
+
+          export NVM_DIR="$HOME/.nvm"
+          [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+
+          cd /home/webprod/apps/assessment/assessment
+
+          # ==========================
+          # Create .env.local
+          # ==========================
+          cat > .env.local <<ENV
+          NODE_ENV_DEV=${{ secrets.NODE_ENV_DEV }}
+
+          ENV
+
+          git fetch origin devserver
+          git reset --hard origin/devserver
+          git clean -fd
+
+          rm -rf .next
+
+          npm install
+          npm run build
+
+          pm2 delete assessment-dev  || true
+          pm2 restart /home/webprod/apps/assessment/assessment/ecosystem.config.js
+          pm2 save
+
+          EOF
+
+      - name: Deploy Production
+        if: github.ref == 'refs/heads/main'
+        run: |
+          ssh -o StrictHostKeyChecking=no \
+              -i ~/.ssh/github_actions \
+              -p "${{ secrets.VPS_PORT }}" \
+              "${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }}" << 'EOF'
+
+          set -e
+
+          export NVM_DIR="$HOME/.nvm"
+          [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+
+          cd /home/webprod/apps/assessment/assessment
+
+          # ==========================
+          # Create .env.local
+          # ==========================
+          cat > .env.local <<ENV
+          NODE_ENV_PROD=${{ secrets.NODE_ENV_PROD }}
+
+          ENV
+
+          git fetch origin main
+          git reset --hard origin/main
+          git clean -fd
+
+          rm -rf .next
+
+          npm install
+          npm run build
+
+          pm2 restart assessment-main || pm2 restart ecosystem.config.js --only  assessment-main
+
+          pm2 save
+
+          EOF
