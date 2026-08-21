@@ -1322,7 +1322,7 @@
 "use client";
 
 import Link from "next/link";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   ArrowLeft,
   ArrowRight,
@@ -1343,7 +1343,7 @@ import { useQportal } from "../context/qportal.context";
 import { useAntiCheat } from "../hooks/useAntiCheat";
 
 export default function CBTExam() {
-  useAntiCheat();
+  
   
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -1352,6 +1352,28 @@ export default function CBTExam() {
   const exp = searchParams.get("exp");
   const skills = searchParams.get("skills")?.split(",") || [];
   const assessmentId = searchParams.get("assessmentId");
+
+  const [warnings, setWarnings] = useState(0);
+  const MAX_WARNINGS = 3;
+
+  const handleCheatAttempt = useCallback((message) => {
+
+    sessionStorage.setItem("warningActive", "true");
+    setWarnings((prev) => {
+      const newWarnings = prev + 1;
+      
+      if (newWarnings >= MAX_WARNINGS) {
+        alert(`FINAL WARNING: ${message}\nYour exam is being automatically submitted.`);
+        router.push("/results");
+      } else {
+        alert(`WARNING ${newWarnings}/${MAX_WARNINGS}: ${message}`);
+      }
+      
+      return newWarnings;
+    });
+  }, [router]);
+
+  useAntiCheat(handleCheatAttempt);
 
   const {
     loading,
@@ -1381,6 +1403,37 @@ export default function CBTExam() {
 
   const answeredCount = Object.keys(answers).length;
   const markedCount = Object.keys(marked).length;
+
+  // ============================================================
+  // FULLSCREEN LOGIC (NEW)
+  // ============================================================
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      if (!document.fullscreenElement) {
+        setIsFullscreen(false);
+        alert("You exited fullscreen! Exam paused."); // Agar alert dikhana ho toh uncomment kar dena
+      }
+    };
+
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    return () => {
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+    };
+  }, []);
+
+  const startFullscreen = async () => {
+    try {
+      const elem = document.documentElement;
+      if (elem.requestFullscreen) {
+        await elem.requestFullscreen();
+        setIsFullscreen(true);
+      }
+    } catch (err) {
+      alert("Please allow fullscreen in your browser to start the exam.");
+    }
+  };
 
   // ============================================================
   // FORMAT TIMER
@@ -1704,6 +1757,35 @@ useEffect(() => {
     </div>
   );
 }
+
+// ============================================================
+  // FULLSCREEN GATE (NEW)
+  // ============================================================
+  if (!isFullscreen) {
+    return (
+      <div className={`flex h-dvh items-center justify-center px-5 ${isDark ? "bg-[#080d13] text-white" : "bg-slate-100 text-slate-900"}`}>
+        <div className={`w-full max-w-md rounded-2xl border p-8 text-center shadow-2xl ${isDark ? "border-cyan-500/20 bg-[#0d141e]" : "border-slate-200 bg-white"}`}>
+          
+          <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-cyan-400/10 text-cyan-400">
+            <LayoutGrid size={32} />
+          </div>
+
+          <h1 className="text-xl font-bold">Ready to Begin?</h1>
+          
+          <p className={`mt-3 text-sm leading-6 ${isDark ? "text-slate-400" : "text-slate-600"}`}>
+            This assessment requires fullscreen mode to ensure a fair proctored environment. Do not exit fullscreen once the test starts.
+          </p>
+
+          <button 
+            onClick={startFullscreen}
+            className="mt-6 w-full rounded-xl bg-cyan-400 px-5 py-3 text-sm font-bold text-[#061016] transition-all hover:bg-cyan-300"
+          >
+            Enter Fullscreen & Start
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     
