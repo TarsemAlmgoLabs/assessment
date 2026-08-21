@@ -13,111 +13,123 @@ import {
   XCircle,
 } from "lucide-react";
 
-const assessmentHistory = [
-  {
-    id: "assessment-001",
-    name: "JavaScript Skill Assessment",
-    date: "18 Aug 2026",
-    time: "07:42 PM",
+import { useHistory } from "../context/history.context";
 
-    score: 24,
-    totalMarks: 30,
-    percentage: 80,
+// const assessmentHistory = [
+//   {
+//     id: "assessment-001",
+//     name: "JavaScript Skill Assessment",
+//     date: "18 Aug 2026",
+//     time: "07:42 PM",
 
-    correct: 24,
-    wrong: 4,
-    skipped: 2,
+//     score: 24,
+//     totalMarks: 30,
+//     percentage: 80,
 
-    status: "passed",
-  },
+//     correct: 24,
+//     wrong: 4,
+//     skipped: 2,
 
-  {
-    id: "assessment-002",
-    name: "React.js Developer Assessment",
-    date: "14 Aug 2026",
-    time: "06:18 PM",
+//     status: "passed",
+//   },
 
-    score: 21,
-    totalMarks: 30,
-    percentage: 70,
+//   {
+//     id: "assessment-002",
+//     name: "React.js Developer Assessment",
+//     date: "14 Aug 2026",
+//     time: "06:18 PM",
 
-    correct: 21,
-    wrong: 6,
-    skipped: 3,
+//     score: 21,
+//     totalMarks: 30,
+//     percentage: 70,
 
-    status: "passed",
-  },
+//     correct: 21,
+//     wrong: 6,
+//     skipped: 3,
 
-  {
-    id: "assessment-003",
-    name: "Node.js Backend Assessment",
-    date: "09 Aug 2026",
-    time: "08:05 PM",
+//     status: "passed",
+//   },
 
-    score: 16,
-    totalMarks: 30,
-    percentage: 53,
+//   {
+//     id: "assessment-003",
+//     name: "Node.js Backend Assessment",
+//     date: "09 Aug 2026",
+//     time: "08:05 PM",
 
-    correct: 16,
-    wrong: 9,
-    skipped: 5,
+//     score: 16,
+//     totalMarks: 30,
+//     percentage: 53,
 
-    status: "failed",
-  },
+//     correct: 16,
+//     wrong: 9,
+//     skipped: 5,
 
-  {
-    id: "assessment-004",
-    name: "MongoDB & Database Assessment",
-    date: "03 Aug 2026",
-    time: "05:32 PM",
+//     status: "failed",
+//   },
 
-    score: 27,
-    totalMarks: 30,
-    percentage: 90,
+//   {
+//     id: "assessment-004",
+//     name: "MongoDB & Database Assessment",
+//     date: "03 Aug 2026",
+//     time: "05:32 PM",
 
-    correct: 27,
-    wrong: 2,
-    skipped: 1,
+//     score: 27,
+//     totalMarks: 30,
+//     percentage: 90,
 
-    status: "passed",
-  },
+//     correct: 27,
+//     wrong: 2,
+//     skipped: 1,
 
-  {
-    id: "assessment-005",
-    name: "Frontend Fundamentals",
-    date: "28 Jul 2026",
-    time: "04:11 PM",
+//     status: "passed",
+//   },
 
-    score: 18,
-    totalMarks: 30,
-    percentage: 60,
+//   {
+//     id: "assessment-005",
+//     name: "Frontend Fundamentals",
+//     date: "28 Jul 2026",
+//     time: "04:11 PM",
 
-    correct: 18,
-    wrong: 8,
-    skipped: 4,
+//     score: 18,
+//     totalMarks: 30,
+//     percentage: 60,
 
-    status: "passed",
-  },
+//     correct: 18,
+//     wrong: 8,
+//     skipped: 4,
 
-  {
-    id: "assessment-006",
-    name: "JavaScript Advanced Concepts",
-    date: "21 Jul 2026",
-    time: "07:26 PM",
+//     status: "passed",
+//   },
 
-    score: 13,
-    totalMarks: 30,
-    percentage: 43,
+//   {
+//     id: "assessment-006",
+//     name: "JavaScript Advanced Concepts",
+//     date: "21 Jul 2026",
+//     time: "07:26 PM",
 
-    correct: 13,
-    wrong: 12,
-    skipped: 5,
+//     score: 13,
+//     totalMarks: 30,
+//     percentage: 43,
 
-    status: "failed",
-  },
-];
+//     correct: 13,
+//     wrong: 12,
+//     skipped: 5,
+
+//     status: "failed",
+//   },
+// ];
 
 export default function AssessmentHistory() {
+  const { historyData: assessmentHistory, loading } = useHistory();
+
+  if (loading || !assessmentHistory) {
+    return (
+      <div className="min-h-screen bg-[#080d13] flex items-center justify-center text-cyan-400">
+        Loading History...
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-[#080d13] text-white">
 
@@ -325,10 +337,9 @@ function AssessmentCard({ assessment }) {
               flex shrink-0 items-center gap-1.5
               rounded-full border px-2.5 py-1.5
               text-[9px] font-bold uppercase tracking-wide
-              ${
-                passed
-                  ? "border-emerald-400/15 bg-emerald-400/10 text-emerald-400"
-                  : "border-red-400/15 bg-red-400/10 text-red-400"
+              ${passed
+                ? "border-emerald-400/15 bg-emerald-400/10 text-emerald-400"
+                : "border-red-400/15 bg-red-400/10 text-red-400"
               }
             `}
           >
@@ -356,20 +367,18 @@ function AssessmentCard({ assessment }) {
               className={`
                 flex h-16 w-16 shrink-0 items-center
                 justify-center rounded-full border-[3px]
-                ${
-                  passed
-                    ? "border-cyan-400/20 bg-cyan-400/[0.04]"
-                    : "border-red-400/20 bg-red-400/[0.04]"
+                ${passed
+                  ? "border-cyan-400/20 bg-cyan-400/[0.04]"
+                  : "border-red-400/20 bg-red-400/[0.04]"
                 }
               `}
             >
               <span
                 className={`
                   text-lg font-black
-                  ${
-                    passed
-                      ? "text-cyan-300"
-                      : "text-red-400"
+                  ${passed
+                    ? "text-cyan-300"
+                    : "text-red-400"
                   }
                 `}
               >

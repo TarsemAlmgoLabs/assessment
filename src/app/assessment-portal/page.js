@@ -1,7 +1,8 @@
 import CBTExam from "../components/qPanel"
+import { Suspense } from "react";
 export default function Portal(){
     return(
-        <CBTExam/>
+        <Suspense fallback={null}><CBTExam /></Suspense>
     )
 }
 

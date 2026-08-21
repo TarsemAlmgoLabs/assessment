@@ -298,7 +298,7 @@ export default function CandidateAssessments() {
           </div>
 
           <h1 className="text-4xl font-bold tracking-tight text-white md:text-5xl">
-            Available Assessments
+            Available Assessments on Vestaff
           </h1>
 
           <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-slate-400 md:text-lg">
