@@ -1,7 +1,8 @@
 'use client'
 import AssessmentRules from "../components/rules"
+import { Suspense } from "react";
 export default function Desclaimer(){
     return(
-        <AssessmentRules/>
+        <Suspense fallback={null}><AssessmentRules /></Suspense>
     )
 }
