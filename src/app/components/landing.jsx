@@ -105,7 +105,7 @@ function AssessmentCard({ assessment }) {
       <div className="pointer-events-none absolute -bottom-16 -right-16 h-40 w-40 rounded-full bg-cyan-400/5 blur-3xl transition-all duration-500 group-hover:bg-cyan-400/10" />
 
       {/* Header */}
-      <div className="relative flex items-start justify-between">
+      {/* <div className="relative flex items-start justify-between">
         <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-cyan-400/20 bg-cyan-400/10 text-cyan-400 shadow-[0_0_20px_rgba(34,211,238,0.12)]">
           <Icon size={23} />
         </div>
@@ -115,6 +115,54 @@ function AssessmentCard({ assessment }) {
         >
           {assessment.experience}
         </span>
+      </div> */}
+      <div className="relative flex items-start justify-between">
+        <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-cyan-400/20 bg-cyan-400/10 text-cyan-400 shadow-[0_0_20px_rgba(34,211,238,0.12)]">
+          <Icon size={23} />
+        </div>
+
+      <select
+        defaultValue=""
+        className="
+          h-9 min-w-[118px]
+          cursor-pointer
+          appearance-none
+          rounded-lg
+          border border-slate-700/80
+          bg-[#111a25]
+          px-3 pr-8
+          text-xs font-semibold
+          text-slate-200
+          shadow-sm
+          outline-none
+          transition-all duration-200
+          hover:border-yellow-400/40
+          hover:bg-[#172231]
+          focus:border-yellow-400/60
+          focus:ring-2
+          focus:ring-yellow-400/10
+        "
+      >
+        <option value="" disabled className="bg-[#111a25] text-slate-500">
+          Select Experience
+        </option>
+
+        <option value="0-1" className="bg-[#111a25] text-slate-200">
+          0–1 Years
+        </option>
+
+        <option value="1-2" className="bg-[#111a25] text-slate-200">
+          1–2 Years
+        </option>
+
+        <option value="2-3" className="bg-[#111a25] text-slate-200">
+          2–3 Years
+        </option>
+
+        <option value="3+" className="bg-[#111a25] text-slate-200">
+          3+ Years
+        </option>
+      </select>
       </div>
 
       {/* Content */}
@@ -292,7 +340,7 @@ export default function CandidateAssessments() {
           </div>
 
           <h1 className="text-4xl font-bold tracking-tight text-white md:text-5xl">
-            Available Assessments on Vestaff
+            Choose Your Assessment
           </h1>
 
           <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-slate-400 md:text-lg">
@@ -313,7 +361,7 @@ export default function CandidateAssessments() {
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
 
           {/* 👉 FIX: Search Bar - col-span-full ensures it takes full width on all screens */}
-          <div className="col-span-full mx-auto mb-2 flex w-full max-w-md items-center gap-2 rounded-xl border border-white/10 bg-[#172231] px-4 py-3 shadow-lg shadow-black/20 ring-1 ring-white/[0.02]">
+          {/* <div className="col-span-full mx-auto mb-2 flex w-full max-w-md items-center gap-2 rounded-xl border border-white/10 bg-[#172231] px-4 py-3 shadow-lg shadow-black/20 ring-1 ring-white/[0.02]">
             <Search size={18} className="shrink-0 text-cyan-400" />
             <input
               onChange={(el) => onSearch(el)}
@@ -321,6 +369,28 @@ export default function CandidateAssessments() {
               placeholder="Search assessments..."
               className="w-full bg-transparent text-sm text-slate-200 outline-none placeholder:text-slate-500"
             />
+          </div> */}
+
+          <div className="col-span-full mb-2 flex w-full flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <h2 className="text-xl font-bold text-white">
+                Available Assessments on Vestaff
+              </h2>
+              <p className="mt-1 text-sm text-slate-500">
+                Explore assessments and prove your skill set.
+              </p>
+            </div>
+
+            <div className="flex w-full max-w-md items-center gap-2 rounded-xl border border-white/10 bg-[#172231] px-4 py-3 shadow-lg shadow-black/20 ring-1 ring-white/[0.02] sm:w-[320px]">
+              <Search size={18} className="shrink-0 text-cyan-400" />
+
+              <input
+                onChange={(el) => onSearch(el)}
+                type="text"
+                placeholder="Search assessments..."
+                className="w-full bg-transparent text-sm text-slate-200 outline-none placeholder:text-slate-500"
+              />
+            </div>
           </div>
 
           {/* Cards Mapping */}
