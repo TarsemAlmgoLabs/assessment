@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ArrowRight,
   BrainCircuit,
@@ -94,6 +94,7 @@ const assessments = [
 
 function AssessmentCard({ assessment }) {
   const Icon = assessment.icon;
+  const [selectedExp, setSelectedExp] = useState("");
 
   return (
     <div className="group relative overflow-hidden rounded-2xl border border-cyan-500/20 bg-[#101725] p-6 transition-all duration-300 hover:-translate-y-1 hover:border-cyan-400/50 hover:shadow-[0_0_35px_rgba(6,182,212,0.12)]">
@@ -121,9 +122,10 @@ function AssessmentCard({ assessment }) {
           <Icon size={23} />
         </div>
 
-      <select
-        defaultValue=""
-        className="
+        <select
+          value={selectedExp}
+          onChange={(e) => setSelectedExp(e.target.value)}
+          className="
           h-9 min-w-[118px]
           cursor-pointer
           appearance-none
@@ -142,27 +144,27 @@ function AssessmentCard({ assessment }) {
           focus:ring-2
           focus:ring-yellow-400/10
         "
-      >
-        <option value="" disabled className="bg-[#111a25] text-slate-500">
-          Select Experience
-        </option>
+        >
+          <option value="" disabled className="bg-[#111a25] text-slate-500">
+            Select Experience
+          </option>
 
-        <option value="0-1" className="bg-[#111a25] text-slate-200">
-          0–1 Years
-        </option>
+          <option value="0-1" className="bg-[#111a25] text-slate-200">
+            0–1 Years
+          </option>
 
-        <option value="1-2" className="bg-[#111a25] text-slate-200">
-          1–2 Years
-        </option>
+          <option value="1-2" className="bg-[#111a25] text-slate-200">
+            1–2 Years
+          </option>
 
-        <option value="2-3" className="bg-[#111a25] text-slate-200">
-          2–3 Years
-        </option>
+          <option value="2-3" className="bg-[#111a25] text-slate-200">
+            2–3 Years
+          </option>
 
-        <option value="3+" className="bg-[#111a25] text-slate-200">
-          3+ Years
-        </option>
-      </select>
+          <option value="3+" className="bg-[#111a25] text-slate-200">
+            3+ Years
+          </option>
+        </select>
       </div>
 
       {/* Content */}
@@ -223,8 +225,7 @@ function AssessmentCard({ assessment }) {
 
       {/* Button */}
       <Link
-        href={`/desclaimers?title=${assessment.title}&exp=${assessment.experience.split("year")[0]}&skills=${assessment.skills.join(",")}&assessmentId=${assessment._id}}`}
-        disabled={assessment.status !== "Available"}
+        href={`/desclaimers?title=${assessment.title}&exp=${selectedExp || assessment.experience.split("year")[0].trim()}&skills=${assessment.skills.join(",")}&assessmentId=${assessment._id}`} disabled={assessment.status !== "Available"}
         className="relative mt-6 flex w-full items-center justify-center gap-2 rounded-xl border border-cyan-400/30 bg-cyan-400/10 py-3 text-sm font-bold text-cyan-300 transition-all duration-300 hover:border-cyan-300 hover:bg-cyan-400 hover:text-[#071118] hover:shadow-[0_0_25px_rgba(34,211,238,0.25)] disabled:cursor-not-allowed disabled:border-white/10 disabled:bg-white/5 disabled:text-slate-500 cursor-pointer"
       >
         {assessment.status === "Available" ? (

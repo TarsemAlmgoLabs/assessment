@@ -14,7 +14,7 @@ const Questions = [
     answer: 2,
     codeSnippet: `const PI = 3.14;
 console.log(PI);`,
-    time : "10"
+    time : "100"
   },
   {
     id: 2,
