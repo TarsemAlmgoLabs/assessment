@@ -145,7 +145,7 @@ export const AppProvider = ({ children }) => {
     //   console.error("Failed to fetch assessments:", error);
 
     // }
-    const token = localStorage.getItem("token");
+    const token = getClientCookie("accessToken");
     console.log("Retrieved token from cookies:", token);
   if (!token) {
     console.error("No token found in cookies.");
