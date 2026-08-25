@@ -92,15 +92,12 @@ const assessments = [
   },
 ];
 
-
-
 function AssessmentCard({ assessment }) {
   const Icon = assessment.icon;
 
   return (
     <div className="group relative overflow-hidden rounded-2xl border border-cyan-500/20 bg-[#101725] p-6 transition-all duration-300 hover:-translate-y-1 hover:border-cyan-400/50 hover:shadow-[0_0_35px_rgba(6,182,212,0.12)]">
-        
-      
+
       {/* Top Glow */}
       <div className="absolute left-0 top-0 h-px w-24 bg-gradient-to-r from-cyan-400 to-transparent" />
 
@@ -108,7 +105,7 @@ function AssessmentCard({ assessment }) {
       <div className="pointer-events-none absolute -bottom-16 -right-16 h-40 w-40 rounded-full bg-cyan-400/5 blur-3xl transition-all duration-500 group-hover:bg-cyan-400/10" />
 
       {/* Header */}
-      <div className="relative flex items-start justify-between">
+      {/* <div className="relative flex items-start justify-between">
         <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-cyan-400/20 bg-cyan-400/10 text-cyan-400 shadow-[0_0_20px_rgba(34,211,238,0.12)]">
           <Icon size={23} />
         </div>
@@ -118,6 +115,54 @@ function AssessmentCard({ assessment }) {
         >
           {assessment.experience}
         </span>
+      </div> */}
+      <div className="relative flex items-start justify-between">
+        <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-cyan-400/20 bg-cyan-400/10 text-cyan-400 shadow-[0_0_20px_rgba(34,211,238,0.12)]">
+          <Icon size={23} />
+        </div>
+
+      <select
+        defaultValue=""
+        className="
+          h-9 min-w-[118px]
+          cursor-pointer
+          appearance-none
+          rounded-lg
+          border border-slate-700/80
+          bg-[#111a25]
+          px-3 pr-8
+          text-xs font-semibold
+          text-slate-200
+          shadow-sm
+          outline-none
+          transition-all duration-200
+          hover:border-yellow-400/40
+          hover:bg-[#172231]
+          focus:border-yellow-400/60
+          focus:ring-2
+          focus:ring-yellow-400/10
+        "
+      >
+        <option value="" disabled className="bg-[#111a25] text-slate-500">
+          Select Experience
+        </option>
+
+        <option value="0-1" className="bg-[#111a25] text-slate-200">
+          0–1 Years
+        </option>
+
+        <option value="1-2" className="bg-[#111a25] text-slate-200">
+          1–2 Years
+        </option>
+
+        <option value="2-3" className="bg-[#111a25] text-slate-200">
+          2–3 Years
+        </option>
+
+        <option value="3+" className="bg-[#111a25] text-slate-200">
+          3+ Years
+        </option>
+      </select>
       </div>
 
       {/* Content */}
@@ -126,7 +171,8 @@ function AssessmentCard({ assessment }) {
           {assessment.category}
         </div>
 
-        <h3 className="text-xl font-bold text-white transition-colors group-hover:text-cyan-300">
+        {/* break-words aur line-clamp-2 add kiya hai */}
+        <h3 className="text-lg sm:text-xl font-bold text-white transition-colors group-hover:text-cyan-300 break-words line-clamp-2">
           {assessment.title}
         </h3>
 
@@ -135,32 +181,32 @@ function AssessmentCard({ assessment }) {
         </p>
       </div>
 
-     <div className="mt-6">
-      <p className="mb-3 text-sm font-semibold text-slate-400">
-        Skills Required
-      </p>
+      <div className="mt-6">
+        <p className="mb-3 text-sm font-semibold text-slate-400">
+          Skills Required
+        </p>
 
-      <div className="flex flex-wrap gap-2">
-        {assessment.skills?.map((skill, index) => (
-          <div
-            key={index}
-            className="
-              rounded-lg
-              border border-cyan-400/15
-              bg-cyan-400/[0.06]
-              px-3 py-1.5
-              text-xs font-semibold
-              text-cyan-300
-              transition-all duration-200
-              hover:border-cyan-400/30
-              hover:bg-cyan-400/10
-            "
-          >
-            {skill}
-          </div>
-        ))}
+        <div className="flex flex-wrap gap-2">
+          {assessment.skills?.map((skill, index) => (
+            <div
+              key={index}
+              className="
+                rounded-lg
+                border border-cyan-400/15
+                bg-cyan-400/[0.06]
+                px-3 py-1.5
+                text-xs font-semibold
+                text-cyan-300
+                transition-all duration-200
+                hover:border-cyan-400/30
+                hover:bg-cyan-400/10
+              "
+            >
+              {skill}
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
 
       {/* Stats */}
       <div className="relative mt-5 flex items-center gap-5 border-t border-white/5 pt-4">
@@ -207,7 +253,6 @@ function AssessmentCard({ assessment }) {
 }
 
 export default function CandidateAssessments() {
-
   const {
     loading,
     setLoading,
@@ -216,40 +261,39 @@ export default function CandidateAssessments() {
     userData,
     FilterAssessments,
     filterAssessmentsFun
-    
   } = AssessmentContext();
 
-  useEffect(el=>{
-    fetchAssessments()
-  },[])
+  useEffect((el) => {
+    fetchAssessments();
+  }, []);
 
-  function onSearch(el){
-    filterAssessmentsFun(Assessments, el.target.value)
+  function onSearch(el) {
+    filterAssessmentsFun(Assessments, el.target.value);
   }
 
   return (
-    <section className="relative min-h-screen overflow-hidden bg-[#0b1016] px-6 py-16 text-white md:px-10 lg:px-16">
-        <Link
-            href="/history"
-            className="
-                fixed right-5 top-5 z-50
-                rounded-xl border border-white/[0.08]
-                bg-[#0d141e]/95
-                px-4 py-2.5
-                text-xs font-semibold text-slate-300
-                shadow-lg shadow-black/20
-                backdrop-blur-xl
-                transition-all duration-200
-                hover:border-cyan-400/30
-                hover:bg-cyan-400/10
-                hover:text-cyan-300
-                sm:right-8 sm:top-6
-            "
-            >
-            Old Assessments
-        </Link>
+    <section className="relative min-h-screen overflow-hidden bg-[#0b1016] px-6 pt-24 pb-16 text-white md:px-10 lg:px-16">
+      <Link
+        href="/history"
+        className="
+          fixed right-5 top-5 z-50
+          rounded-xl border border-white/[0.08]
+          bg-[#0d141e]/95
+          px-4 py-2.5
+          text-xs font-semibold text-slate-300
+          shadow-lg shadow-black/20
+          backdrop-blur-xl
+          transition-all duration-200
+          hover:border-cyan-400/30
+          hover:bg-cyan-400/10
+          hover:text-cyan-300
+          sm:right-8 sm:top-6
+        "
+      >
+        Old Assessments
+      </Link>
 
-       <button
+      <button
         className="
           fixed left-6 top-6 z-50
           rounded-xl
@@ -285,20 +329,18 @@ export default function CandidateAssessments() {
       <div className="pointer-events-none absolute left-1/2 top-0 h-72 w-[600px] -translate-x-1/2 rounded-full bg-cyan-500/10 blur-[120px]" />
 
       <div className="relative mx-auto max-w-7xl">
-
         {/* Header */}
         <div className="mb-12 text-center">
-
+          {/* Header Title restored to original state */}
           <div className="mb-5 inline-flex items-center gap-2 rounded-md border border-cyan-400/20 bg-cyan-400/10 px-4 py-2">
             <ShieldCheck size={15} className="text-cyan-400" />
-
             <span className="text-xs font-bold uppercase tracking-[0.2em] text-cyan-400">
               Candidate Assessments
             </span>
           </div>
 
           <h1 className="text-4xl font-bold tracking-tight text-white md:text-5xl">
-            Available Assessments on Vestaff
+            Choose Your Assessment
           </h1>
 
           <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-slate-400 md:text-lg">
@@ -308,45 +350,57 @@ export default function CandidateAssessments() {
 
           {/* Stats */}
           <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
-
-            {/* <div className="rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-sm text-slate-400">
-              <span className="font-bold text-white">
-                {Assessments.length}
-              </span>{" "}
-              Assessments
-            </div> */}
-
-            {/* <div className="rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-sm text-slate-400">
-              <span className="font-bold text-cyan-400">5</span> Skills
-            </div> */}
-
             <div className="rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-sm text-slate-400">
               Verified by VeStaff
             </div>
-
           </div>
         </div>
 
-        {/* Assessment Cards */}
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
-          <div className="mb-5 flex w-full max-w-md items-center gap-2 rounded-xl border border-white/10 bg-[#172231] px-3 py-2.5 shadow-lg shadow-black/20 ring-1 ring-white/[0.02] col-span-3">
-            <Search size={17} className="shrink-0 text-cyan-400" />
+        {/* Assessment Cards Grid */}
+        {/* 👉 FIX: grid-cols-1 for mobile, sm:grid-cols-2 for tablet, lg:grid-cols-3 for desktop */}
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
 
+          {/* 👉 FIX: Search Bar - col-span-full ensures it takes full width on all screens */}
+          {/* <div className="col-span-full mx-auto mb-2 flex w-full max-w-md items-center gap-2 rounded-xl border border-white/10 bg-[#172231] px-4 py-3 shadow-lg shadow-black/20 ring-1 ring-white/[0.02]">
+            <Search size={18} className="shrink-0 text-cyan-400" />
             <input
-                onChange={el=> onSearch(el)}
+              onChange={(el) => onSearch(el)}
+              type="text"
+              placeholder="Search assessments..."
+              className="w-full bg-transparent text-sm text-slate-200 outline-none placeholder:text-slate-500"
+            />
+          </div> */}
+
+          <div className="col-span-full mb-2 flex w-full flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <h2 className="text-xl font-bold text-white">
+                Available Assessments on Vestaff
+              </h2>
+              <p className="mt-1 text-sm text-slate-500">
+                Explore assessments and prove your skill set.
+              </p>
+            </div>
+
+            <div className="flex w-full max-w-md items-center gap-2 rounded-xl border border-white/10 bg-[#172231] px-4 py-3 shadow-lg shadow-black/20 ring-1 ring-white/[0.02] sm:w-[320px]">
+              <Search size={18} className="shrink-0 text-cyan-400" />
+
+              <input
+                onChange={(el) => onSearch(el)}
                 type="text"
                 placeholder="Search assessments..."
                 className="w-full bg-transparent text-sm text-slate-200 outline-none placeholder:text-slate-500"
-            />
+              />
             </div>
-          {FilterAssessments.map((assessment) => (
+          </div>
+
+          {/* Cards Mapping */}
+          {FilterAssessments.map((assessment, index) => (
             <AssessmentCard
-              key={assessment.id}
+              key={assessment._id || assessment.id || index}
               assessment={assessment}
             />
           ))}
         </div>
-
       </div>
     </section>
   );
