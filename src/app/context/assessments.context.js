@@ -112,25 +112,25 @@ export const AppProvider = ({ children }) => {
   const [authenticated, setAuthenticated] = useState(false);
   const [authorized, setAuthorized] = useState(false);
   const [userData, setUserData] = useState({
-    fname : "tarsem",
-    tier : "gold",
-    email : "ts6346298@gmail.com"
+    fname: "tarsem",
+    tier: "gold",
+    email: "ts6346298@gmail.com"
   })
   const [testMode, SetTestMode] = useState('dark')
 
-  const testModeSet = (mode)=>{
-      SetTestMode(testMode=> mode)
+  const testModeSet = (mode) => {
+    SetTestMode(testMode => mode)
   }
 
   const getClientCookie = (name) => {
-  if (typeof document === 'undefined') return null; // Prevents SSR errors
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) return parts.pop().split(';').shift();
-  return null;
-};
+    if (typeof document === 'undefined') return null; // Prevents SSR errors
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+    return null;
+  };
 
-  const Authentication = async()=>{
+  const Authentication = async () => {
     // try{
     //   const response = await axios.get("/api/authentication");
 
@@ -147,36 +147,37 @@ export const AppProvider = ({ children }) => {
     // }
     const token = getClientCookie("accessToken");
     console.log("Retrieved token from cookies:", token);
-  if (!token) {
-    console.error("No token found in cookies.");
-    return null;
+    if (!token) {
+      console.error("No token found in cookies.");
+      return null;
+    }
+
+    try {
+      const response = await axios.get(
+        "https://assessmentapi.vestaff.com/api/authentication",
+        {
+          withCredentials: true,
+        }
+      );
+      console.log("Authentication response:", response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      return null;
+    }
   }
 
-  try {
-    const response = await axios.get("https://assessmentapi.vestaff.com/api/authentication", {
-      headers: {
-        "Authentication": `Bearer ${token}`
-      }
-    });
-    console.log("Authentication response:", response.data);
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching data:", error);
-    return null;
-  }
-  }
-
-  const Authorization = async()=>{
-    try{
+  const Authorization = async () => {
+    try {
       // const response = await axios.get("/api/authorization");
 
       // console.log(response.data);
       setUserData((userData) => ({
         ...userData,
-        tier : "gold",
+        tier: "gold",
       }));
-      setAuthorized(authorized=> true);
-    }catch(error){
+      setAuthorized(authorized => true);
+    } catch (error) {
       console.error("Failed to fetch assessments:", error);
 
     }
@@ -187,22 +188,22 @@ export const AppProvider = ({ children }) => {
       // const response = await axios.get("/api/assessments");
 
       // console.log(response.data);
-      setAssessments(Assessments=> assessments);
-      setFilterAssessments(filterAssessments=> assessments)
+      setAssessments(Assessments => assessments);
+      setFilterAssessments(filterAssessments => assessments)
       return assessments;
     } catch (error) {
       console.error("Failed to fetch assessments:", error);
     }
   };
 
-  const filterAssessmentsFun = async(assessments, text)=>{
-    const newAssessments = assessments.filter(el=>{
-      if(el.title.toLowerCase().includes(text.toLowerCase())){
+  const filterAssessmentsFun = async (assessments, text) => {
+    const newAssessments = assessments.filter(el => {
+      if (el.title.toLowerCase().includes(text.toLowerCase())) {
         return el;
       }
     })
 
-    setFilterAssessments(FilterAssessments=> newAssessments);
+    setFilterAssessments(FilterAssessments => newAssessments);
   }
 
   const value = {
