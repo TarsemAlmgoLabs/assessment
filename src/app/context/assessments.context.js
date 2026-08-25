@@ -3,6 +3,7 @@
 'use client'
 import { createContext, useContext, useState } from "react";
 import axios from 'axios'
+// import { cookies } from "next/headers";
 const AppContext = createContext();
 import {
   ArrowRight,
@@ -121,21 +122,48 @@ export const AppProvider = ({ children }) => {
       SetTestMode(testMode=> mode)
   }
 
+  const getClientCookie = (name) => {
+  if (typeof document === 'undefined') return null; // Prevents SSR errors
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+  return null;
+};
+
   const Authentication = async()=>{
-    try{
-      // const response = await axios.get("/api/authentication");
+    // try{
+    //   const response = await axios.get("/api/authentication");
 
-      // console.log(response.data);
-      setAuthenticated(authenticated=> true);
-      setUserData((userData) => ({
-        ...userData,
-        fname: "tarsem",
-        email: "ts6346298@gmail.com",
-      }));
-    }catch(error){
-      console.error("Failed to fetch assessments:", error);
+    //   // console.log(response.data);
+    //   setAuthenticated(authenticated=> true);
+    //   setUserData((userData) => ({
+    //     ...userData,
+    //     fname: "tarsem",
+    //     email: "ts6346298@gmail.com",
+    //   }));
+    // }catch(error){
+    //   console.error("Failed to fetch assessments:", error);
 
-    }
+    // }
+    const token = getClientCookie("token");
+    console.log("Retrieved token from cookies:", token);
+  if (!token) {
+    console.error("No token found in cookies.");
+    return null;
+  }
+
+  try {
+    const response = await axios.get("https://assessmentapi.vestaff.com/api/authentication", {
+      headers: {
+        "Authentication": `Bearer ${token}`
+      }
+    });
+    console.log("Authentication response:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    return null;
+  }
   }
 
   const Authorization = async()=>{
