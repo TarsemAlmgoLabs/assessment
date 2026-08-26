@@ -150,7 +150,7 @@ function AssessmentCard({ assessment }) {
           <option value="" disabled className="bg-[#111a25] text-slate-500">
             Select Experience
           </option>
-          {assessment?.experience.map(el=>
+          {assessment?.experience?.map(el=>
             <option className="bg-[#111a25] text-slate-200" value={el}>
               {el}
             </option>
@@ -428,7 +428,7 @@ export default function CandidateAssessments() {
           </div>
 
           {/* Cards Mapping */}
-          {FilterAssessments.map((assessment, index) => (
+          {FilterAssessments?.map((assessment, index) => (
             <AssessmentCard
               key={assessment._id || assessment.id || index}
               assessment={assessment}
