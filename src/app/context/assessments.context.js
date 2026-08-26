@@ -209,12 +209,15 @@ export const AppProvider = ({ children }) => {
 
   const fetchAssessments = async () => {
     try {
-      // const response = await axios.get("/api/assessments");
-
-      // console.log(response.data);
-      setAssessments(Assessments => assessments);
-      setFilterAssessments(filterAssessments => assessments)
-      return assessments;
+      // const response = await axios.get("https://assessmentapi.vestaff.com/api/assessments", { withCredentials: true });
+      const response = await axios.get(
+        "https://assessmentapi.vestaff.com/api/assessments",
+        { withCredentials: true }
+      );
+      console.log(response.data);
+      setAssessments(Assessments => response.data.assessments);
+      setFilterAssessments(filterAssessments => response.data.assessments)
+      return response.assessments;
     } catch (error) {
       console.error("Failed to fetch assessments:", error);
     }

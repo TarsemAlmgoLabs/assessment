@@ -93,8 +93,10 @@ const assessments = [
 ];
 
 function AssessmentCard({ assessment }) {
-  const Icon = assessment.icon;
-  const [selectedExp, setSelectedExp] = useState("");
+  const Icon = assessment.icon ? assessment.icon : Users;
+  const [selectedExp, setSelectedExp] = useState(
+    assessment?.experience?.[0] || ""
+  );
 
   return (
     <div className="group relative overflow-hidden rounded-2xl border border-cyan-500/20 bg-[#101725] p-6 transition-all duration-300 hover:-translate-y-1 hover:border-cyan-400/50 hover:shadow-[0_0_35px_rgba(6,182,212,0.12)]">
@@ -148,22 +150,13 @@ function AssessmentCard({ assessment }) {
           <option value="" disabled className="bg-[#111a25] text-slate-500">
             Select Experience
           </option>
+          {assessment?.experience?.map(el=>
+            <option className="bg-[#111a25] text-slate-200" value={el}>
+              {el}
+            </option>
 
-          <option value="0-1" className="bg-[#111a25] text-slate-200">
-            0–1 Years
-          </option>
+          )}
 
-          <option value="1-2" className="bg-[#111a25] text-slate-200">
-            1–2 Years
-          </option>
-
-          <option value="2-3" className="bg-[#111a25] text-slate-200">
-            2–3 Years
-          </option>
-
-          <option value="3+" className="bg-[#111a25] text-slate-200">
-            3+ Years
-          </option>
         </select>
       </div>
 
@@ -204,14 +197,14 @@ function AssessmentCard({ assessment }) {
                 hover:bg-cyan-400/10
               "
             >
-              {skill}
+              {skill?.split("_").join(" ").toUpperCase()}
             </div>
           ))}
         </div>
       </div>
 
       {/* Stats */}
-      <div className="relative mt-5 flex items-center gap-5 border-t border-white/5 pt-4">
+      {/* <div className="relative mt-5 flex items-center gap-5 border-t border-white/5 pt-4">
         <div className="flex items-center gap-2 text-sm text-slate-400">
           <Clock3 size={16} className="text-cyan-400" />
           {assessment.duration}
@@ -221,7 +214,47 @@ function AssessmentCard({ assessment }) {
           <FileText size={16} className="text-cyan-400" />
           {assessment.questions} Questions
         </div>
+      </div> */}
+
+     {selectedExp && assessment?.question_config?.[selectedExp] && (
+      <div className="relative mt-5 border-t border-white/5 pt-4">
+        <div className="mb-3 text-sm font-medium text-slate-300">
+          {selectedExp}
+        </div>
+
+        <div className="flex flex-wrap items-center gap-5">
+          {/* Duration */}
+          <div className="flex items-center gap-2 text-sm text-slate-400">
+            <Clock3 size={16} className="text-cyan-400" />
+            {assessment.question_config[selectedExp].duration}
+          </div>
+
+          {/* Total Questions */}
+          <div className="flex items-center gap-2 text-sm text-slate-400">
+            <FileText size={16} className="text-cyan-400" />
+            {assessment.question_config[selectedExp].total} Questions
+          </div>
+
+          {/* Easy */}
+          <div className="flex items-center gap-2 text-sm text-slate-400">
+            <span className="h-2 w-2 rounded-full bg-emerald-400" />
+            Easy: {assessment.question_config[selectedExp].easy}
+          </div>
+
+          {/* Medium */}
+          <div className="flex items-center gap-2 text-sm text-slate-400">
+            <span className="h-2 w-2 rounded-full bg-yellow-400" />
+            Medium: {assessment.question_config[selectedExp].medium}
+          </div>
+
+          {/* Hard */}
+          <div className="flex items-center gap-2 text-sm text-slate-400">
+            <span className="h-2 w-2 rounded-full bg-red-400" />
+            Hard: {assessment.question_config[selectedExp].hard}
+          </div>
+        </div>
       </div>
+    )}
 
       {/* Button */}
       <Link
@@ -395,7 +428,7 @@ export default function CandidateAssessments() {
           </div>
 
           {/* Cards Mapping */}
-          {FilterAssessments.map((assessment, index) => (
+          {FilterAssessments?.map((assessment, index) => (
             <AssessmentCard
               key={assessment._id || assessment.id || index}
               assessment={assessment}
