@@ -201,8 +201,8 @@ export const AppProvider = ({ children }) => {
         { withCredentials: true }
       );
       console.log(response.data);
-      setAssessments(Assessments => response.assessments);
-      setFilterAssessments(filterAssessments => response.assessments)
+      setAssessments(Assessments => response.data.assessments);
+      setFilterAssessments(filterAssessments => response.data.assessments)
       return response.assessments;
     } catch (error) {
       console.error("Failed to fetch assessments:", error);
