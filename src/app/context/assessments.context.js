@@ -1,8 +1,9 @@
 // context/AppContext.jsx
 
 'use client'
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import axios from 'axios'
+// import { cookies } from "next/headers";
 const AppContext = createContext();
 import {
   ArrowRight,
@@ -111,44 +112,82 @@ export const AppProvider = ({ children }) => {
   const [authenticated, setAuthenticated] = useState(false);
   const [authorized, setAuthorized] = useState(false);
   const [userData, setUserData] = useState({
-    fname : "tarsem",
-    tier : "gold",
-    email : "ts6346298@gmail.com"
+    fname: "tarsem",
+    tier: "gold",
+    email: "ts6346298@gmail.com"
   })
   const [testMode, SetTestMode] = useState('dark')
 
-  const testModeSet = (mode)=>{
-      SetTestMode(testMode=> mode)
+  const testModeSet = (mode) => {
+    SetTestMode(testMode => mode)
   }
 
-  const Authentication = async()=>{
-    try{
-      // const response = await axios.get("/api/authentication");
+  const getClientCookie = (name) => {
+    if (typeof document === 'undefined') return null; // Prevents SSR errors
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+    return null;
+  };
 
-      // console.log(response.data);
-      setAuthenticated(authenticated=> true);
-      setUserData((userData) => ({
-        ...userData,
-        fname: "tarsem",
-        email: "ts6346298@gmail.com",
-      }));
-    }catch(error){
-      console.error("Failed to fetch assessments:", error);
+  const Authentication = async () => {
+    // try{
+    //   const response = await axios.get("/api/authentication");
 
+    //   // console.log(response.data);
+    //   setAuthenticated(authenticated=> true);
+    //   setUserData((userData) => ({
+    //     ...userData,
+    //     fname: "tarsem",
+    //     email: "ts6346298@gmail.com",
+    //   }));
+    // }catch(error){
+    //   console.error("Failed to fetch assessments:", error);
+
+    // }
+    //   const token = getClientCookie("accessToken");
+    //   console.log("Retrieved token from cookies:", token);
+    // if (!token) {
+    //   console.error("No token found in cookies.");
+    //   return null;
+    // }
+
+    try {
+      const response = await axios.get(
+        "https://assessmentapi.vestaff.com/api/authentication",
+        { withCredentials: true }
+      );
+
+      console.log("Authentication response:", response.data);
+
+      if (response.data?.authenticated) {
+        setAuthenticated(true);
+        setUserData(response.data.data);
+      }
+
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setAuthenticated(false);
+      return null;
     }
-  }
+  };
 
-  const Authorization = async()=>{
-    try{
+  useEffect(() => {
+  Authentication();
+}, []);
+
+  const Authorization = async () => {
+    try {
       // const response = await axios.get("/api/authorization");
 
       // console.log(response.data);
       setUserData((userData) => ({
         ...userData,
-        tier : "gold",
+        tier: "gold",
       }));
-      setAuthorized(authorized=> true);
-    }catch(error){
+      setAuthorized(authorized => true);
+    } catch (error) {
       console.error("Failed to fetch assessments:", error);
 
     }
@@ -156,25 +195,28 @@ export const AppProvider = ({ children }) => {
 
   const fetchAssessments = async () => {
     try {
-      // const response = await axios.get("/api/assessments");
-
-      // console.log(response.data);
-      setAssessments(Assessments=> assessments);
-      setFilterAssessments(filterAssessments=> assessments)
-      return assessments;
+      // const response = await axios.get("https://assessmentapi.vestaff.com/api/assessments", { withCredentials: true });
+      const response = await axios.get(
+        "https://assessmentapi.vestaff.com/api/assessments",
+        { withCredentials: true }
+      );
+      console.log(response.data);
+      setAssessments(Assessments => response.data.assessments);
+      setFilterAssessments(filterAssessments => response.data.assessments)
+      return response.assessments;
     } catch (error) {
       console.error("Failed to fetch assessments:", error);
     }
   };
 
-  const filterAssessmentsFun = async(assessments, text)=>{
-    const newAssessments = assessments.filter(el=>{
-      if(el.title.toLowerCase().includes(text.toLowerCase())){
+  const filterAssessmentsFun = async (assessments, text) => {
+    const newAssessments = assessments.filter(el => {
+      if (el.title.toLowerCase().includes(text.toLowerCase())) {
         return el;
       }
     })
 
-    setFilterAssessments(FilterAssessments=> newAssessments);
+    setFilterAssessments(FilterAssessments => newAssessments);
   }
 
   const value = {
