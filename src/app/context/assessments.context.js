@@ -178,20 +178,34 @@ export const AppProvider = ({ children }) => {
 }, []);
 
   const Authorization = async () => {
-    try {
-      // const response = await axios.get("/api/authorization");
+  try {
+    // Cookie ko automatically bhejne ke liye withCredentials: true ka use
+    const response = await axios.get(
+      "https://assessmentapi.vestaff.com/api/authorization",
+      { withCredentials: true }
+    );
 
-      // console.log(response.data);
-      setUserData((userData) => ({
-        ...userData,
-        tier: "gold",
+    console.log("Authorization response:", response.data);
+
+    if (response.data?.authorized) {
+      setAuthorized(true);
+      
+      // Purane data (fname, email) ko safe rakhte hue sirf tier update karenge
+      setUserData((prevData) => ({
+        ...prevData,
+        tier: response.data.data.tier,
       }));
-      setAuthorized(authorized => true);
-    } catch (error) {
-      console.error("Failed to fetch assessments:", error);
-
+    } else {
+      setAuthorized(false);
     }
+
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching authorization data:", error);
+    setAuthorized(false);
+    return null;
   }
+};
 
   const fetchAssessments = async () => {
     try {
