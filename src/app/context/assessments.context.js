@@ -195,8 +195,11 @@ export const AppProvider = ({ children }) => {
 
   const fetchAssessments = async () => {
     try {
-      const response = await axios.get("https://assessmentapi.vestaff.com/api/assessments");
-
+      // const response = await axios.get("https://assessmentapi.vestaff.com/api/assessments", { withCredentials: true });
+      const response = await axios.get(
+        "https://assessmentapi.vestaff.com/api/assessments",
+        { withCredentials: true }
+      );
       console.log(response.data);
       setAssessments(Assessments => response.assessments);
       setFilterAssessments(filterAssessments => response.assessments)
