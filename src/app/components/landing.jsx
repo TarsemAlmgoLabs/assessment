@@ -197,7 +197,7 @@ function AssessmentCard({ assessment }) {
                 hover:bg-cyan-400/10
               "
             >
-              {skill}
+              {skill?.split("_").join(" ").toUpperCase()}
             </div>
           ))}
         </div>
