@@ -195,12 +195,12 @@ export const AppProvider = ({ children }) => {
 
   const fetchAssessments = async () => {
     try {
-      // const response = await axios.get("/api/assessments");
+      const response = await axios.get("https://assessmentapi.vestaff.com/api/assessments");
 
-      // console.log(response.data);
-      setAssessments(Assessments => assessments);
-      setFilterAssessments(filterAssessments => assessments)
-      return assessments;
+      console.log(response.data);
+      setAssessments(Assessments => response.assessments);
+      setFilterAssessments(filterAssessments => response.assessments)
+      return response.assessments;
     } catch (error) {
       console.error("Failed to fetch assessments:", error);
     }
