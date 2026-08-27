@@ -5,7 +5,8 @@ import { QportalProvider } from "./context/qportal.context";
 import { ResultProvider } from "./context/Result.context";
 import { HistoryProvider } from "./context/history.context";
 import { AssessmentProvider } from "./context/admin.context";
-
+import { AdminResultProvider } from './adminResult.context';
+import { ManageAssessmentProvider } from './manageAssessment.context';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,7 +35,11 @@ export default function RootLayout({ children }) {
             <ResultProvider>
               <HistoryProvider>
                 <AssessmentProvider>
-                  {children}
+                  <AdminResultProvider>
+                    <ManageAssessmentProvider>
+                      {children}
+                    </ManageAssessmentProvider>
+                  </AdminResultProvider>
                 </AssessmentProvider>
               </HistoryProvider>
             </ResultProvider>
