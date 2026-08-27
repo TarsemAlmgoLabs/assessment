@@ -13,7 +13,7 @@ import {
   Trophy,
   CheckCircle2,
 } from "lucide-react";
-import { useAdminResults } from "./adminResult.context";
+import { useAdminResults } from "../context/adminResult.context";
 
 // =====================================================
 // DUMMY RESULTS

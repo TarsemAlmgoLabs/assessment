@@ -214,6 +214,6 @@ export function AdminResultProvider({ children }) {
 }
 
 // 3. Custom Hook (Import karne ke liye)
-export const useResults = () => {
+export const useAdminResults = () => {
     return useContext(AdminResultContext);
 };
