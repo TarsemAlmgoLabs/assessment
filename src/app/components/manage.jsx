@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   CalendarDays,
   Clock3,
@@ -14,37 +14,37 @@ import {
   CalendarClock,
   ShieldAlert,
 } from "lucide-react";
+import { useManageAssessment } from "../context/manageAssessment.context";
+import { useRouter } from "next/navigation";
 
 // =====================================================
 // DUMMY ASSESSMENT
 // =====================================================
 
-const dummyAssessment = {
-  id: 1,
-  title: "Advanced React Assessment",
-  category: "Frontend",
-  description:
-    "Advanced React assessment covering hooks, state management, performance and scalable architecture.",
-  candidates: 94,
-  questions: 45,
-  duration: "60 Minutes",
-  startDate: "2026-08-26",
-  startTime: "11:00",
-  endDate: "2026-08-28",
-  endTime: "18:00",
-  status: "upcoming",
-};
+// const dummyAssessment = {
+//   id: 1,
+//   title: "Advanced React Assessment",
+//   category: "Frontend",
+//   description:
+//     "Advanced React assessment covering hooks, state management, performance and scalable architecture.",
+//   candidates: 94,
+//   questions: 45,
+//   duration: "60 Minutes",
+//   startDate: "2026-08-26",
+//   startTime: "11:00",
+//   endDate: "2026-08-28",
+//   endTime: "18:00",
+//   status: "upcoming",
+// };
 
 // =====================================================
 // MAIN COMPONENT
 // =====================================================
 
-export default function ManageAssessment({
-  assessment = dummyAssessment,
-  onSave,
-  onCancel,
-  onBack,
-}) {
+export default function ManageAssessment() {
+
+  const { assessment, isLoading, updateSchedule, cancelAssessment } = useManageAssessment();
+  const router = useRouter();
   const [startDate, setStartDate] = useState(
     assessment.startDate
   );
@@ -68,40 +68,62 @@ export default function ManageAssessment({
 
   const [cancelled, setCancelled] = useState(false);
 
+
+  // Jab assessment load ho jaye, toh state me values set karni padengi input fields ke liye
+  useEffect(() => {
+    if (assessment) {
+      setStartDate(assessment.startDate);
+      setStartTime(assessment.startTime);
+      setEndDate(assessment.endDate);
+      setEndTime(assessment.endTime);
+      
+      // Agar backend se cancelled aaya hai
+      if(assessment.status === "cancelled") {
+          setCancelled(true);
+      }
+    }
+  }, [assessment]);
+
+  // Loading Screen
+  if (isLoading || !assessment) {
+    return <div className="min-h-screen bg-[#071017] text-white flex items-center justify-center">Loading Assessment Details...</div>;
+  }
+
   // ===================================================
   // SAVE
   // ===================================================
 
-  const handleSave = () => {
+  const handleSave = async () => {
     setSaving(true);
-
-    const updatedAssessment = {
+    
+    // API Call through Context
+    const success = await updateSchedule({
       ...assessment,
       startDate,
       startTime,
       endDate,
       endTime,
-    };
+    });
 
-    setTimeout(() => {
-      setSaving(false);
-
-      if (onSave) {
-        onSave(updatedAssessment);
-      }
-    }, 500);
+    setSaving(false);
+    
+    if (success) {
+      router.back("/admin"); // Ya router.push("/admin") jo bhi route ho
+    }
   };
 
   // ===================================================
   // CANCEL
   // ===================================================
 
-  const handleCancelAssessment = () => {
-    setCancelled(true);
+  const handleCancelAssessment = async () => {
     setShowCancelModal(false);
-
-    if (onCancel) {
-      onCancel(assessment);
+    
+    // API Call through Context
+    const success = await cancelAssessment();
+    
+    if(success) {
+       setCancelled(true); 
     }
   };
 
@@ -135,10 +157,10 @@ export default function ManageAssessment({
             </p>
 
             <button
-              onClick={onBack}
-              className="mt-7 inline-flex h-11 items-center gap-2 rounded-xl bg-cyan-400 px-6 text-sm font-extrabold text-[#061018] hover:bg-cyan-300"
+              onClick={() => router.back()} // <-- Ye automatically pichle page pe le jayega
+              className="mb-5 flex items-center gap-2 text-xs font-bold text-slate-500 transition hover:text-cyan-300"
             >
-              <ChevronLeft size={16} />
+              <ChevronLeft size={15} />
               Back to Assessments
             </button>
 
@@ -173,7 +195,7 @@ export default function ManageAssessment({
           <div>
 
             <button
-              onClick={onBack}
+              onClick={() => router.back()}
               className="mb-5 flex items-center gap-2 text-xs font-bold text-slate-500 transition hover:text-cyan-300"
             >
               <ChevronLeft size={15} />
