@@ -45,20 +45,21 @@ export default function ManageAssessment() {
 
   const { assessment, isLoading, updateSchedule, cancelAssessment } = useManageAssessment();
   const router = useRouter();
+  
   const [startDate, setStartDate] = useState(
-    assessment.startDate
+    assessment?.startDate || ""
   );
 
   const [startTime, setStartTime] = useState(
-    assessment.startTime
+    assessment?.startTime || ""
   );
 
   const [endDate, setEndDate] = useState(
-    assessment.endDate
+    assessment?.endDate || ""
   );
 
   const [endTime, setEndTime] = useState(
-    assessment.endTime
+    assessment?.endTime || ""
   );
 
   const [showCancelModal, setShowCancelModal] =
