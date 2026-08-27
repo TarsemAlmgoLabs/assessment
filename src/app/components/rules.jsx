@@ -392,21 +392,39 @@ export default function AssessmentRules() {
             Back
           </Link>
 
-          <Link
-            href={`/assessment-portal?title=${encodeURIComponent(title)}&exp=${encodeURIComponent(exp)}&skills=${encodeURIComponent(skills.join(","))}&assessmentId=${encodeURIComponent(assessmentId)}`}
-            className="
-              flex items-center justify-center gap-2
-              rounded-xl bg-cyan-400
-              px-7 py-3
-              text-sm font-bold text-[#061016]
-              shadow-[0_0_25px_rgba(34,211,238,0.12)]
-              transition-all
-              hover:bg-cyan-300 cursor-pointer
-            "
-          >
-            I Understand, Start Assessment
-            <CheckCircle2 size={17} />
-          </Link>
+          {/* Check if both are enabled */}
+          {micEnabled && cameraEnabled ? (
+            <Link
+              href={`/assessment-portal?title=${encodeURIComponent(title)}&exp=${encodeURIComponent(exp)}&skills=${encodeURIComponent(skills.join(","))}&assessmentId=${encodeURIComponent(assessmentId)}`}
+              className="
+                flex items-center justify-center gap-2
+                rounded-xl bg-cyan-400
+                px-7 py-3
+                text-sm font-bold text-[#061016]
+                shadow-[0_0_25px_rgba(34,211,238,0.12)]
+                transition-all
+                hover:bg-cyan-300 cursor-pointer
+              "
+            >
+              I Understand, Start Assessment
+              <CheckCircle2 size={17} />
+            </Link>
+          ) : (
+            <button
+              disabled
+              className="
+                flex items-center justify-center gap-2
+                rounded-xl bg-slate-800/50
+                px-7 py-3
+                text-sm font-bold text-slate-500
+                cursor-not-allowed
+                transition-all
+              "
+            >
+              Allow Mic & Camera to Start
+              <CheckCircle2 size={17} opacity={0.5} />
+            </button>
+          )}
 
         </div>
 
