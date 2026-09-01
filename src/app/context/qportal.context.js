@@ -157,7 +157,7 @@ export const QportalProvider = ({ children }) => {
           "https://assessmentapi.vestaff.com/api/assessments/generate",
           {
             title,
-            exp,
+            exp : "0-1 years",
             skills,
             assessmentId,
           },
