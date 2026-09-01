@@ -153,12 +153,18 @@ export const QportalProvider = ({ children }) => {
     try {
         setLoading(true);
 
-        const response = await axios.post("https://assessmentapi.vestaff.com/api/assessments/generate", {
-        title,
-        exp,
-        skills,
-        assessmentId,
-        });
+       const response = await axios.post(
+          "https://assessmentapi.vestaff.com/api/assessments/generate",
+          {
+            title,
+            exp,
+            skills,
+            assessmentId,
+          },
+          {
+            withCredentials: true,
+          }
+        );
         console.log(response.data.questions)
         setQuestions(questions=> response.data.questions)
 
