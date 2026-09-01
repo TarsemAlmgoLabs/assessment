@@ -153,14 +153,14 @@ export const QportalProvider = ({ children }) => {
     try {
         setLoading(true);
 
-        // const response = await axios.post("/api/assessment/load", {
-        // title,
-        // exp,
-        // skills,
-        // assessmentId,
-        // });
-
-        setQuestions(questions=> Questions)
+        const response = await axios.post("https://assessmentapi.vestaff.com/api/assessments/generate", {
+        title,
+        exp,
+        skills,
+        assessmentId,
+        });
+        console.log(response.data.questions)
+        setQuestions(questions=> response.data.questions)
 
         return Questions;
     } catch (error) {
