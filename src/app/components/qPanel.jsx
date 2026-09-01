@@ -1373,7 +1373,7 @@ export default function CBTExam() {
     });
   }, [router]);
 
-  useAntiCheat(handleCheatAttempt);
+  // useAntiCheat(handleCheatAttempt);
 
   const {
     loading,
