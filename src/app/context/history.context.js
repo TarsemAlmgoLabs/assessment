@@ -96,7 +96,7 @@ export const HistoryProvider = ({ children }) => {
 
   try {
     const response = await axios.get(
-      "https://assessmentapi.vestaff.com/api/assessment/all_history?page=1&limit=10",
+      "https://assessmentapi.vestaff.com/api/assessment/all_history?page=1&limit=100",
       {
         withCredentials: true,
       }
