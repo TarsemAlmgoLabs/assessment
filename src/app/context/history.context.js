@@ -1,6 +1,6 @@
 "use client";
 import { createContext, useContext, useState, useEffect } from "react";
-// import axios from 'axios'; // 
+import axios from 'axios'; // 
 
 const HistoryContext = createContext();
 
@@ -92,19 +92,40 @@ export const HistoryProvider = ({ children }) => {
 
   // Simulate API Call
   const fetchHistory = async () => {
-    setLoading(true);
-    try {
-      // const response = await axios.get("/api/assessment/history");
-      // setHistoryData(response.data);
-      
-      // Simulation ke liye directly state set kar rahe hain:
-      setHistoryData((prev) => mockHistoryData);
-    } catch (error) {
-      console.error("Failed to fetch history:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  setLoading(true);
+
+  try {
+    const response = await axios.get(
+      "https://assessmentapi.vestaff.com/api/assessment/all_history?page=1&limit=10",
+      {
+        withCredentials: true,
+      }
+    );
+
+    const mappedHistory = response.data.history.map((item) => ({
+      id: item.attempt_id,
+      name: item.assessment_name,
+      date: item.date,
+      time: item.time,
+      score: item.score,
+      totalMarks: item.total_marks,
+      percentage: item.percentage,
+      correct: item.correct_answers,
+      wrong: item.wrong_answers,
+      skipped: item.skipped,
+      status: item.passed ? "passed" : "failed",
+    }));
+
+    setHistoryData(mappedHistory);
+
+    console.log("Mapped History:", mappedHistory);
+
+  } catch (error) {
+    console.error("Failed to fetch history:", error);
+  } finally {
+    setLoading(false);
+  }
+};
 
   // Jab application load ho tab list fetch kar le
   useEffect(() => {

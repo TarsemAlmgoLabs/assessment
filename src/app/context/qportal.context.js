@@ -178,11 +178,37 @@ export const QportalProvider = ({ children }) => {
     }
     };
 
+  
+  const submitAssessment = async({title,exp,skills,assessmentId,questions})=>{
+    try{
+      setLoading(true);
+       const response = await axios.post(
+          "https://assessmentapi.vestaff.com/api/assessments/submit",
+          {
+            title,
+            exp,
+            skills,
+            assessmentId,
+            answers : questions
+          },
+          {
+            withCredentials: true,
+          }
+        );
+      setLoading(false);
+        console.log("apicall",response.data.status)
+      return response.data.status;
+    }catch(error){
+
+    }
+  }
+
   const value = {
     loading,
     setLoading,
     questions,
-    loadAssessment
+    loadAssessment,
+    submitAssessment
   };
 
   return (

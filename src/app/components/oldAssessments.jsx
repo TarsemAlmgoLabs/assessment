@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import React from "react";
+import React , {useEffect} from "react";
 import {
   ArrowLeft,
   CalendarDays,
@@ -120,8 +120,10 @@ import { useHistory } from "../context/history.context";
 // ];
 
 export default function AssessmentHistory() {
-  const { historyData: assessmentHistory, loading } = useHistory();
-
+  const { historyData: assessmentHistory, loading, fetchHistory } = useHistory();
+  useEffect(el=>{
+    fetchHistory();
+  }, [])
   if (loading || !assessmentHistory) {
     return (
       <div className="min-h-screen bg-[#080d13] flex items-center justify-center text-cyan-400">

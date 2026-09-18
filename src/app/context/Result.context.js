@@ -1,6 +1,6 @@
 'use client'
 import { createContext, useContext, useState, useEffect } from "react";
-// import axios from 'axios'; 
+import axios from 'axios'; 
 
 const ResultContext = createContext();
 
@@ -93,12 +93,23 @@ export const ResultProvider = ({ children }) => {
   const [resultData, setResultData] = useState(null);
 
   // Jab component mount ho, tab mock data load kar do (simulate API call)
-  const fetchResult = async () => {
+  const fetchResult = async (assessmentId, exp) => {
     setLoading(true);
     try {
-      // const response = await axios.get("/api/assessment/result");
-      // setResultData(response.data);
-      
+      const response = await axios.post(
+      "https://assessmentapi.vestaff.com/api/assessment/history",
+      {
+        assessmentId: assessmentId,
+        exp: exp,
+        page: 1,
+        limit: 10,
+      },
+      {
+        withCredentials: true,
+      }
+    );
+      setResultData(response.data);
+      console.log(response.data)
       // Simulation:
       setResultData(resultData => mockResultData);
     } catch (error) {

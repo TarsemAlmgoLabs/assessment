@@ -876,7 +876,7 @@
 "use client";
 
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useState , useEffect} from "react";
 import {
   ArrowLeft,
   Check,
@@ -889,6 +889,7 @@ import {
   XCircle,
 } from "lucide-react";
 import { useResult } from "../context/Result.context";
+import { useSearchParams, useRouter } from "next/navigation";
 
 const reportReasons = [
   "Question is incorrect",
@@ -900,14 +901,21 @@ const reportReasons = [
 ];
 
 export default function AssessmentResult() {
-  const { resultData: result, loading } = useResult();
+  const { resultData: result, loading, fetchResult } = useResult();
+  const searchParams = useSearchParams();
+  const exp = searchParams.get("exp");
+  const assessmentId = searchParams.get("assessmentId");
 
   const [theme, setTheme] = useState("dark");
   const [reportQuestion, setReportQuestion] = useState(null);
   const [reportedQuestions, setReportedQuestions] = useState({});
   const [reportReason, setReportReason] = useState("");
   const [reportDescription, setReportDescription] = useState("");
-
+  useEffect(() => {
+    if (assessmentId && exp) {
+      fetchResult(assessmentId, exp);
+    }
+  }, [assessmentId, exp]);
   if (loading || !result) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#080d13]">

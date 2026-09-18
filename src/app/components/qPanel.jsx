@@ -1341,6 +1341,7 @@ import {
 import { useSearchParams, useRouter } from "next/navigation";
 import { useQportal } from "../context/qportal.context";
 import { useAntiCheat } from "../hooks/useAntiCheat";
+import { Ephesis } from "next/font/google";
 
 export default function CBTExam() {
   
@@ -1380,6 +1381,7 @@ export default function CBTExam() {
     setLoading,
     questions,
     loadAssessment,
+    submitAssessment
   } = useQportal();
 
   useEffect(() => {
@@ -1409,19 +1411,19 @@ export default function CBTExam() {
   // ============================================================
   const [isFullscreen, setIsFullscreen] = useState(false);
 
-  useEffect(() => {
-    const handleFullscreenChange = () => {
-      if (!document.fullscreenElement) {
-        setIsFullscreen(false);
-        alert("You exited fullscreen! Exam paused."); // Agar alert dikhana ho toh uncomment kar dena
-      }
-    };
+  // useEffect(() => {
+  //   const handleFullscreenChange = () => {
+  //     if (!document.fullscreenElement) {
+  //       setIsFullscreen(false);
+  //       alert("You exited fullscreen! Exam paused."); // Agar alert dikhana ho toh uncomment kar dena
+  //     }
+  //   };
 
-    document.addEventListener("fullscreenchange", handleFullscreenChange);
-    return () => {
-      document.removeEventListener("fullscreenchange", handleFullscreenChange);
-    };
-  }, []);
+  //   document.addEventListener("fullscreenchange", handleFullscreenChange);
+  //   return () => {
+  //     document.removeEventListener("fullscreenchange", handleFullscreenChange);
+  //   };
+  // }, []);
 
   const startFullscreen = async () => {
     try {
@@ -1653,7 +1655,7 @@ useEffect(() => {
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion((prev) => prev + 1);
     } else {
-      router.push("/results");
+      // router.push("/results");
     }
 
     console.log(answers);
@@ -1691,6 +1693,36 @@ useEffect(() => {
 
     return "unanswered";
   };
+
+  const submissionOfanswers = async ()=>{
+      const submitResponse = {
+        title,
+        exp,
+        assessmentId,
+        skills,
+        questions : []
+      }
+
+      const formattedAnswers = Object.entries(answers).map(
+        ([question_id, option_marked]) => ({
+          question_id,
+          option_marked,
+        })
+      );
+
+      const response = {
+        answers: formattedAnswers,
+      };
+      console.log(response)
+      submitResponse.questions = formattedAnswers
+      console.log(submitResponse);
+      // submitAssessment(submitResponse);
+      const result = await submitAssessment(submitResponse);
+      if (result === "success") {
+        router.push(`/results?assessmentId=${assessmentId}&exp=${exp}`);
+      }
+
+  }
 
   // ============================================================
   // LOADING
@@ -2244,7 +2276,7 @@ useEffect(() => {
                   return (
                     <button
                       key={item.id}
-                      onClick={() => goToQuestion(index)}
+                      // onClick={() => goToQuestion(index)}
                       disabled={isLocked}
                       className={`
                         relative flex h-9 items-center justify-center
@@ -2253,12 +2285,12 @@ useEffect(() => {
                         ${
                           isLocked
                             ? "cursor-not-allowed opacity-70"
-                            : "hover:-translate-y-[1px] cursor-pointer"
+                            : "hover:-translate-y-[1px]"
                         }
                         ${styles}
                       `}
                     >
-                      {item.id}
+                      {index+1}
 
                       {status === "marked" && !isLocked && (
                         <span className="absolute -right-1 -top-1 h-2 w-2 rounded-full bg-yellow-400" />
@@ -2376,7 +2408,7 @@ useEffect(() => {
               `}
             >
 
-              <div className="flex items-center gap-2.5 sm:gap-3">
+              {/* <div className="flex items-center gap-2.5 sm:gap-3">
 
                 <div
                   className={`
@@ -2409,7 +2441,7 @@ useEffect(() => {
                     {question?.id} of {questions.length}
                   </p>
                 </div>
-              </div>
+              </div> */}
 
               {/* Mark button intentionally kept commented */}
 
@@ -2475,12 +2507,13 @@ useEffect(() => {
                 </div>
 
                 {/* Code Snippet */}
-
-                <div className="w-full mt-4 overflow-x-auto rounded-xl border border-gray-800 bg-[#0d1117] p-5">
-                  <pre className="m-0 whitespace-pre-wrap break-words font-mono text-sm leading-6 text-gray-300">
-                    {question?.codeSnippet}
-                  </pre>
-                </div>
+                {question.codeSnippet &&
+                  <div className="w-full mt-4 overflow-x-auto rounded-xl border border-gray-800 bg-[#0d1117] p-5">
+                    <pre className="m-0 whitespace-pre-wrap break-words font-mono text-sm leading-6 text-gray-300">
+                      {question?.codeSnippet}
+                    </pre>
+                  </div>
+                }
 
                 {/* Options */}
 
@@ -2627,8 +2660,8 @@ useEffect(() => {
               {/* Last question */}
 
               {currentQuestion === questions.length - 1 ? (
-                <Link
-                  href={"/results"}
+                <button
+                  onClick={submissionOfanswers}
                   className="
                     flex items-center justify-center gap-2
                     rounded-xl bg-cyan-400 px-5 py-2.5
@@ -2640,7 +2673,7 @@ useEffect(() => {
                 >
                   <Send size={16} />
                   Submit Assessment
-                </Link>
+                </button>
               ) : (
                 <button
                   onClick={nextQuestion}
