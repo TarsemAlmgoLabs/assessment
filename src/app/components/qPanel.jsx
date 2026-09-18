@@ -1694,35 +1694,60 @@ useEffect(() => {
     return "unanswered";
   };
 
-  const submissionOfanswers = async ()=>{
-      const submitResponse = {
-        title,
-        exp,
-        assessmentId,
-        skills,
-        questions : []
-      }
+  // const submissionOfanswers = async ()=>{
+  //     const submitResponse = {
+  //       title,
+  //       exp,
+  //       assessmentId,
+  //       skills,
+  //       questions : []
+  //     }
 
-      const formattedAnswers = Object.entries(answers).map(
-        ([question_id, option_marked]) => ({
-          question_id,
-          option_marked,
-        })
+  //     const formattedAnswers = Object.entries(answers).map(
+  //       ([question_id, option_marked]) => ({
+  //         question_id,
+  //         option_marked,
+  //       })
+  //     );
+
+  //     const response = {
+  //       answers: formattedAnswers,
+  //     };
+  //     console.log(response)
+  //     submitResponse.questions = formattedAnswers
+  //     console.log(submitResponse);
+  //     // submitAssessment(submitResponse);
+  //     const result = await submitAssessment(submitResponse);
+  //     if (result === "success") {
+  //       router.push(`/results?assessmentId=${assessmentId}&exp=${exp}`);
+  //     }
+
+  // }
+
+  const submissionOfanswers = async () => {
+    const formattedAnswers = questions.map((question) => ({
+      question_id: question.id,
+      option_marked: answers[question.id] ?? -1,
+    }));
+
+    const submitResponse = {
+      title,
+      exp,
+      assessmentId,
+      skills,
+      questions: formattedAnswers,
+    };
+
+    console.log("Final Submission:", submitResponse);
+
+    const result = await submitAssessment(submitResponse);
+
+    if (result === "success") {
+      router.push(
+        `/results?assessmentId=${assessmentId}&exp=${encodeURIComponent(exp)}`
       );
-
-      const response = {
-        answers: formattedAnswers,
-      };
-      console.log(response)
-      submitResponse.questions = formattedAnswers
-      console.log(submitResponse);
-      // submitAssessment(submitResponse);
-      const result = await submitAssessment(submitResponse);
-      if (result === "success") {
-        router.push(`/results?assessmentId=${assessmentId}&exp=${exp}`);
-      }
-
-  }
+    }
+  };
 
   // ============================================================
   // LOADING
