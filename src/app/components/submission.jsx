@@ -1044,7 +1044,7 @@ export default function AssessmentResult() {
 
             <div
               className={`flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-bold ${
-                passed
+                result.passed=="passed"
                   ? isLight
                     ? "border-emerald-200 bg-emerald-50 text-emerald-600"
                     : "border-emerald-400/15 bg-emerald-400/10 text-emerald-400"
@@ -1054,7 +1054,7 @@ export default function AssessmentResult() {
               }`}
             >
               {passed ? <CheckCircle2 size={14} /> : <XCircle size={14} />}
-              {passed ? "Passed" : "Failed"}
+              {result.passed=="passed" ? "Passed" : "Failed"}
             </div>
           </div>
         </div>
@@ -1087,7 +1087,7 @@ export default function AssessmentResult() {
             <div className="text-center">
               <div
                 className={`mx-auto inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.16em] ${
-                  passed
+                  result.passed
                     ? isLight
                       ? "border-emerald-200 bg-emerald-50 text-emerald-600"
                       : "border-emerald-400/15 bg-emerald-400/10 text-emerald-400"
@@ -1096,12 +1096,12 @@ export default function AssessmentResult() {
                       : "border-red-400/15 bg-red-400/10 text-red-400"
                 }`}
               >
-                {passed ? (
+                {result.passed=='passed' ? (
                   <CheckCircle2 size={14} />
                 ) : (
                   <XCircle size={14} />
                 )}
-                {passed ? "Assessment Passed" : "Assessment Failed"}
+                {result.passed=='passed' ? "Assessment Passed" : "Assessment Failed"}
               </div>
 
               <h2
@@ -1607,6 +1607,22 @@ function QuestionResult({
           : isSkipped
             ? "You did not answer this question."
             : "Your selected answer was incorrect."}
+      </div>
+
+      <div className="mt-5 border-t border-[#202b36] bg-[#111820] px-6 py-5">
+        <div className="flex items-start gap-3">
+          <span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-blue-500" />
+
+          <div>
+            <h3 className="mb-3 text-[16px] font-semibold text-[#f1f5f9]">
+              Explanation
+            </h3>
+
+            <p className="text-[15px] leading-7 text-[#91a4bd]">
+              {question.explanation}
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );

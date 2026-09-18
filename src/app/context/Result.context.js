@@ -93,14 +93,73 @@ export const ResultProvider = ({ children }) => {
   const [resultData, setResultData] = useState(null);
 
   // Jab component mount ho, tab mock data load kar do (simulate API call)
+  // const fetchResult = async (assessmentId, exp) => {
+  //   setLoading(true);
+  //   try {
+  //     const response = await axios.post(
+  //     "https://assessmentapi.vestaff.com/api/assessment/history",
+  //     {
+  //       assessmentId: assessmentId,
+  //       exp: exp,
+  //       page: 1,
+  //       limit: 10,
+  //     },
+  //     {
+  //       withCredentials: true,
+  //     }
+  //   );
+  //     setResultData(response.data);
+  //     console.log(response.data)
+
+  //     const mappedResult = {
+  //       assessmentName: response.data.assessment_name,
+  //       totalQuestions:
+  //         response.data.correct_answers + response.data.wrong_answers + response.data.skipped,
+
+  //       correct: response.data.correct_answers,
+  //       wrong: response.data.wrong_answers,
+  //       skipped: response.data.skipped,
+
+  //       totalMarks: response.data.total_marks,
+  //       obtainedMarks: response.data.score,
+
+  //       passingMarks: "",
+
+  //       questions: response.data?.answers?.map((item, index) => ({
+  //         id: index + 1,
+  //         question: item.statement,
+
+  //         options: item.options.map((option) => option.text),
+
+  //         selectedAnswer:
+  //           item.option_marked === -1
+  //             ? null
+  //             : item.options[item.option_marked]?.text ?? null,
+
+  //         correctAnswer:
+  //           item.options[item.correct_option_index]?.text ?? null,
+  //       })),
+  //     };
+
+  //     setResultData(mappedResult);
+  //     // Simulation:
+  //     // setResultData(resultData => mockResultData);
+  //   } catch (error) {
+  //     console.error("Failed to fetch result:", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
   const fetchResult = async (assessmentId, exp) => {
-    setLoading(true);
-    try {
-      const response = await axios.post(
+  setLoading(true);
+
+  try {
+    const response = await axios.post(
       "https://assessmentapi.vestaff.com/api/assessment/history",
       {
-        assessmentId: assessmentId,
-        exp: exp,
+        assessmentId,
+        exp,
         page: 1,
         limit: 10,
       },
@@ -108,16 +167,67 @@ export const ResultProvider = ({ children }) => {
         withCredentials: true,
       }
     );
-      setResultData(response.data);
-      console.log(response.data)
-      // Simulation:
-      setResultData(resultData => mockResultData);
-    } catch (error) {
-      console.error("Failed to fetch result:", error);
-    } finally {
-      setLoading(false);
+
+    console.log("API RESPONSE:", response.data);
+
+    const data = response.data?.history?.[0];
+
+    if (!data) {
+      console.log("No result found");
+      return;
     }
-  };
+
+    const mappedResult = {
+      assessmentName: data.assessment_name,
+      totalQuestions: data.answers?.length || 0,
+      passed: data.passed,
+      correct: data.correct_answers,
+      wrong: data.wrong_answers,
+      skipped: data.skipped,
+
+      totalMarks: data.total_marks,
+      obtainedMarks: data.score,
+
+      passingMarks: "",
+
+      questions: (data.answers || []).map((item, index) => {
+        const selectedIndex =
+          item.option_marked === -1
+            ? -1
+            : item.option_marked - 1;
+
+        return {
+          id: index + 1,
+
+          question: item.statement,
+
+          options: (item.options || []).map(
+            (option) => option.text
+          ),
+
+          selectedAnswer:
+            selectedIndex === -1
+              ? null
+              : item.options?.[selectedIndex]?.text || null,
+
+          correctAnswer:
+            item.options?.[item.correct_option_index]?.text || null,
+          explanation:
+            item.explanation|| null,
+        };
+      }),
+    };
+
+    console.log("MAPPED RESULT:", mappedResult);
+    console.log(mappedResult)
+    setResultData(mappedResult);
+
+  } catch (error) {
+    console.error("Failed to fetch result:", error);
+  } finally {
+    setLoading(false);
+  }
+};
 
   // Jab Provider load ho automatically data fetch kar lega
   useEffect(() => {

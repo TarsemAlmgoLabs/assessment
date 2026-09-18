@@ -181,30 +181,30 @@ export function AdminResultProvider({ children }) {
     const [isLoading, setIsLoading] = useState(true);
 
     // 2. Fetch Data Logic
-    useEffect(() => {
-        const fetchResults = async () => {
-            setIsLoading(true);
-            try {
-                // =====================================================
-                // BACKEND INTEGRATION SPOT
-                // =====================================================
-                // const response = await fetch('YOUR_API_ENDPOINT/results');
-                // const data = await response.json();
-                // setResults(data);
+    // useEffect(() => {
+    //     const fetchResults = async () => {
+    //         setIsLoading(true);
+    //         try {
+    //             // =====================================================
+    //             // BACKEND INTEGRATION SPOT
+    //             // =====================================================
+    //             // const response = await fetch('YOUR_API_ENDPOINT/results');
+    //             // const data = await response.json();
+    //             // setResults(data);
 
-                // Fake API Call (500ms delay)
-                setTimeout(() => {
-                    setResults(dummyResults);
-                    setIsLoading(false);
-                }, 500);
-            } catch (error) {
-                console.error("Failed to fetch results:", error);
-                setIsLoading(false);
-            }
-        };
+    //             // Fake API Call (500ms delay)
+    //             setTimeout(() => {
+    //                 setResults(dummyResults);
+    //                 setIsLoading(false);
+    //             }, 500);
+    //         } catch (error) {
+    //             console.error("Failed to fetch results:", error);
+    //             setIsLoading(false);
+    //         }
+    //     };
 
-        fetchResults();
-    }, []);
+    //     // fetchResults();
+    // }, []);
 
     return (
         <AdminResultContext.Provider value={{ results, isLoading }}>
