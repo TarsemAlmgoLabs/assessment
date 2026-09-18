@@ -471,7 +471,7 @@ function AssessmentCard({ assessment }) {
         </div>
 
         <Link
-          href={"/results"}
+          href={`/results?assessmentId=${assessment.id}&exp=${assessment.exp}`}
           className="
             flex items-center gap-2
             rounded-lg border
@@ -488,6 +488,28 @@ function AssessmentCard({ assessment }) {
           <Eye size={14} />
           View Result
         </Link>
+        {
+          assessment.certificate &&
+
+          <Link
+            href={"/results"}
+            className="
+              flex items-center gap-2
+              rounded-lg border
+              border-cyan-400/15
+              bg-cyan-400/[0.06]
+              px-3.5 py-2
+              text-xs font-semibold
+              text-cyan-400
+              transition-all
+              hover:border-cyan-400/30
+              hover:bg-cyan-400/10
+            "
+          >
+            <Eye size={14} />
+            Download Certificate
+          </Link>
+        }
 
       </div>
 

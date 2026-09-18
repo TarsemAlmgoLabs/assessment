@@ -102,6 +102,8 @@ export const HistoryProvider = ({ children }) => {
       }
     );
 
+    console.log("helo",response.data.history);
+
     const mappedHistory = response.data.history.map((item) => ({
       id: item.attempt_id,
       name: item.assessment_name,
@@ -114,6 +116,8 @@ export const HistoryProvider = ({ children }) => {
       wrong: item.wrong_answers,
       skipped: item.skipped,
       status: item.passed ? "passed" : "failed",
+      certificate: item.certificate_url,
+      exp: item.exp
     }));
 
     setHistoryData(mappedHistory);
