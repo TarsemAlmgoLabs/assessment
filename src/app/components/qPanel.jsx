@@ -1385,7 +1385,14 @@ export default function CBTExam() {
   } = useQportal();
 
   useEffect(() => {
-    loadAssessment(title, exp, skills, assessmentId);
+    console.log("user params", exp);
+    let expnew = ''
+    if(exp=='3  years') {
+      expnew = '3+ years'
+    }else{
+      expnew=exp;
+    }
+    loadAssessment(title, expnew, skills, assessmentId);
   }, []);
 
   const [currentQuestion, setCurrentQuestion] = useState(0);

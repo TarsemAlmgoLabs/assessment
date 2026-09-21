@@ -150,13 +150,21 @@ function AssessmentCard({ assessment }) {
           <option value="" disabled className="bg-[#111a25] text-slate-500">
             Select Experience
           </option>
-          {assessment?.experience?.map(el=>
+          {/* {assessment?.experience?.map(el=>
             <option className="bg-[#111a25] text-slate-200" value={el}>
               {el}
             </option>
 
-          )}
-
+          )} */}
+          <option className="bg-[#111a25] text-slate-200" value="0-1.5 years">
+              0-1.5 years
+            </option>
+            <option className="bg-[#111a25] text-slate-200" value="1.5-3 years">
+              1.5-3 years
+            </option>
+            <option className="bg-[#111a25] text-slate-200" value="3+ years">
+              3+ years
+            </option>
         </select>
       </div>
 
@@ -267,7 +275,7 @@ function AssessmentCard({ assessment }) {
             Start Assessment
             <ArrowRight
               size={16}
-              className="transition-transform group-hover:translate-x-1 cursor-pointer"
+              className="transition-transform group-hover:translate-x-1 cursor-pointer" 
             />
           </>
         ) : assessment.status === "Completed" ? (
@@ -430,7 +438,7 @@ export default function CandidateAssessments() {
           {/* Cards Mapping */}
           {FilterAssessments?.map((assessment, index) => (
             <AssessmentCard
-              key={assessment._id || assessment.id || index}
+              key={index}
               assessment={assessment}
             />
           ))}
