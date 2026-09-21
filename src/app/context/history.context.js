@@ -105,7 +105,7 @@ export const HistoryProvider = ({ children }) => {
     console.log("helo",response.data.history);
 
     const mappedHistory = response.data.history.map((item) => ({
-      id: item.attempt_id,
+      id: item.assessment_id,
       name: item.assessment_name,
       date: item.date,
       time: item.time,
