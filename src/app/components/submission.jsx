@@ -901,7 +901,7 @@ const reportReasons = [
 ];
 
 export default function AssessmentResult() {
-  const { resultData: result, loading, fetchResult } = useResult();
+  const { resultData: result, loading, fetchResult, reportQuestionFun } = useResult();
   const searchParams = useSearchParams();
   const exp = searchParams.get("exp");
   const assessmentId = searchParams.get("assessmentId");
@@ -953,6 +953,7 @@ export default function AssessmentResult() {
       reason: reportReason,
       description: reportDescription.trim(),
     };
+    reportQuestionFun(reportData.questionId,assessmentId, reportData.reason, reportData.description)
 
     /*
       Backend API yahan call kar sakta hai:
@@ -1317,7 +1318,7 @@ export default function AssessmentResult() {
               >
                 <div className="mb-2 flex items-center gap-2">
                   <span className="rounded-md bg-cyan-400/10 px-2 py-1 text-[10px] font-bold text-cyan-500">
-                    Q{reportQuestion.id}
+                    Q{reportQuestion.inx}
                   </span>
 
                   <span

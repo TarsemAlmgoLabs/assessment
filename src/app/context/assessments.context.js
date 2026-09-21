@@ -233,6 +233,7 @@ export const AppProvider = ({ children }) => {
     setFilterAssessments(FilterAssessments => newAssessments);
   }
 
+
   const value = {
     loading,
     setLoading,
@@ -246,7 +247,8 @@ export const AppProvider = ({ children }) => {
     FilterAssessments,
     filterAssessmentsFun,
     testModeSet,
-    testMode
+    testMode,
+    
   };
 
   return (

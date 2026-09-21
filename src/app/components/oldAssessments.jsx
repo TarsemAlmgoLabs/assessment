@@ -229,9 +229,9 @@ export default function AssessmentHistory() {
 
         <div className="grid gap-4 lg:grid-cols-2">
 
-          {assessmentHistory.map((assessment) => (
+          {assessmentHistory.map((assessment,index) => (
             <AssessmentCard
-              key={assessment.id}
+              key={index}
               assessment={assessment}
             />
           ))}
@@ -491,8 +491,11 @@ function AssessmentCard({ assessment }) {
         {
           assessment.certificate &&
 
-          <Link
-            href={"/results"}
+          <a
+            href={assessment.certificate}
+            download
+            target="_blank"
+            rel="noopener noreferrer"
             className="
               flex items-center gap-2
               rounded-lg border
@@ -506,9 +509,9 @@ function AssessmentCard({ assessment }) {
               hover:bg-cyan-400/10
             "
           >
-            <Eye size={14} />
+            {/* <Download size={14} /> */}
             Download Certificate
-          </Link>
+          </a>
         }
 
       </div>

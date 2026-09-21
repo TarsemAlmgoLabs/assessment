@@ -177,6 +177,8 @@ export const ResultProvider = ({ children }) => {
       return;
     }
 
+    console.log("dsdsd", data)
+
     const mappedResult = {
       assessmentName: data.assessment_name,
       totalQuestions: data.answers?.length || 0,
@@ -197,7 +199,8 @@ export const ResultProvider = ({ children }) => {
             : item.option_marked - 1;
 
         return {
-          id: index + 1,
+          id: item.question_id,
+          inx: index+1,
 
           question: item.statement,
 
@@ -229,6 +232,28 @@ export const ResultProvider = ({ children }) => {
   }
 };
 
+  const reportQuestionFun = async (questionId, assessmentId, reason, description) => {
+    try {
+      const response = await axios.post(
+        "https://assessmentapi.vestaff.com/api/assessment/report-question",
+        {
+          questionId: questionId,
+          assessmentId: assessmentId,
+          reason: reason,
+          description:description
+        },
+        {
+          withCredentials: true,
+        }
+      );
+
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Failed to report question:", error);
+    }
+  };
+
   // Jab Provider load ho automatically data fetch kar lega
   useEffect(() => {
     fetchResult();
@@ -237,7 +262,8 @@ export const ResultProvider = ({ children }) => {
   const value = {
     loading,
     resultData,
-    fetchResult
+    fetchResult,
+    reportQuestionFun
   };
 
   return (

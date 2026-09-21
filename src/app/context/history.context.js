@@ -136,10 +136,13 @@ export const HistoryProvider = ({ children }) => {
     fetchHistory();
   }, []);
 
+ 
+
   const value = {
     loading,
     historyData,
     fetchHistory,
+    
   };
 
   return (
