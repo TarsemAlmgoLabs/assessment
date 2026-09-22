@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect } from "react";
-
+import axios from 'axios'
 // 1. Context Create
 const ManageAssessmentContext = createContext();
 
@@ -50,17 +50,23 @@ export function ManageAssessmentProvider({ children }) {
   }, []);
 
   // 3. Update/Save Logic
-  const updateSchedule = async (updatedData) => {
+  const updateSchedule = async (assessmentId, jobId, startDate, endDate) => {
     try {
-      // Yahan PUT/PATCH API call aayegi
-      // await fetch('/api/assessments/1', { method: 'PUT', body: JSON.stringify(updatedData) });
+      const response = await axios.patch(
+        "https://assessmentapi.vestaff.com/api/v1/admin/mandatory-assessments/update",
+        {
+          assessmentId: assessmentId,
+          jobId: jobId,
+          startDate: startDate,
+          endDate: endDate,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+
+      console.log("Update Response:", response.data);
       
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          setAssessment(updatedData); // Naya data state me set kar diya
-          resolve(true); // Success signal bheja
-        }, 800);
-      });
     } catch (error) {
       console.error("Error updating schedule:", error);
       return false;
@@ -68,9 +74,20 @@ export function ManageAssessmentProvider({ children }) {
   };
 
   // 4. Cancel Logic
-  const cancelAssessment = async () => {
+  const cancelAssessment = async (assessmentId, jobId) => {
     try {
-      // Yahan DELETE ya Status Update (status: 'cancelled') API call aayegi
+      const response = await axios.delete(
+        "https://assessmentapi.vestaff.com/api/v1/admin/mandatory-assessments/remove",
+        {
+          data: {
+            assessmentId: assessmentId,
+            jobId: jobId,
+          },
+          withCredentials: true,
+        }
+      );
+
+      console.log("Delete Response:", response.data);
       return new Promise((resolve) => {
         setTimeout(() => {
           setAssessment((prev) => ({ ...prev, status: "cancelled" }));

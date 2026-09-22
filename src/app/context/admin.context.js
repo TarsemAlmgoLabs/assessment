@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect } from "react";
-
+import axios from "axios";
 // 1. Context Create Karein
 const AssessmentContext = createContext();
 
@@ -173,36 +173,113 @@ export function AssessmentProvider({ children }) {
   const [isLoading, setIsLoading] = useState(true); // API Loading State
 
   // 2. Fetch Data Logic
-  useEffect(() => {
-    const fetchAssessments = async () => {
-      setIsLoading(true);
-      try {
-        // =====================================================
-        // BACKEND INTEGRATION SPOT
-        // =====================================================
-        // Kal ko jab API ready ho jaye toh bas is hisse ko hata kar ye karna hai:
-        // const response = await fetch('YOUR_API_ENDPOINT');
-        // const data = await response.json();
-        // setLiveTests(data.liveTests);
-        // setUpcomingTests(data.upcomingTests);
-        // setPastTests(data.pastTests);
+  // useEffect(() => {
+  //   const fetchAssessments = async () => {
+  //     setIsLoading(true);
+  //     try {
+  //       const response = await axios.get(
+  //         "https://assessmentapi.vestaff.com/api/v1/admin/mandatory-assessments/all",
+  //         {
+  //           withCredentials: true,
+  //         }
+  //       );
 
-        // Filhal ke liye Fake API Call (500ms delay ke sath)
-        setTimeout(() => {
-          setLiveTests(dummyLiveTests); // (Yahan apna pure dummy arrays rakhna)
-          setUpcomingTests(dummyUpcomingTests);
-          setPastTests(dummyPastTests);
-          setIsLoading(false);
-        }, 500);
+  //       console.log(response.data);
+
+  //       // Filhal ke liye Fake API Call (500ms delay ke sath)
+  //       setTimeout(() => {
+  //         setLiveTests(dummyLiveTests); // (Yahan apna pure dummy arrays rakhna)
+  //         setUpcomingTests(dummyUpcomingTests);
+  //         setPastTests(dummyPastTests);
+  //         setIsLoading(false);
+  //       }, 500);
         
-      } catch (error) {
-        console.error("Failed to fetch assessments:", error);
-        setIsLoading(false);
-      }
-    };
+  //     } catch (error) {
+  //       console.error("Failed to fetch assessments:", error);
+  //       setIsLoading(false);
+  //     }
+  //   };
 
-    fetchAssessments();
-  }, []); // Empty dependency array matlab page load par ek baar chalega
+  //   fetchAssessments();
+  // }, []); // Empty dependency array matlab page load par ek baar chalega
+
+  useEffect(() => {
+  const fetchAssessments = async () => {
+    setIsLoading(true);
+
+    try {
+      const response = await axios.get(
+        "https://assessmentapi.vestaff.com/api/v1/admin/mandatory-assessments/all",
+        {
+          withCredentials: true,
+        }
+      );
+
+      const data = response.data?.data;
+
+      const mapAssessment = (assessment) => ({
+        id: assessment._id,
+        assessmentId: assessment.assessmentId,
+        jobId: assessment.jobId,
+
+        title: assessment.title,
+
+        startDate: assessment.startDate,
+        endDate: assessment.endDate,
+
+        date: assessment.startDate
+          ? new Date(assessment.startDate).toLocaleDateString("en-IN", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric",
+            })
+          : "",
+
+        time: assessment.startDate
+          ? new Date(assessment.startDate).toLocaleTimeString("en-IN", {
+              hour: "2-digit",
+              minute: "2-digit",
+            })
+          : "",
+
+        recruiter: {
+          id: assessment.recruiter?.id || "",
+          name: `${assessment.recruiter?.firstName || ""} ${
+            assessment.recruiter?.lastName || ""
+          }`.trim(),
+          email: assessment.recruiter?.email || "",
+          companyName: assessment.recruiter?.companyName || "",
+          mobile: assessment.recruiter?.mobile || "",
+          designation: assessment.recruiter?.designation || "",
+        },
+
+        isMandatory: assessment.isMandatory,
+        usedByRecruiter: assessment.usedByRecruiter,
+
+        createdAt: assessment.createdAt,
+        updatedAt: assessment.updatedAt,
+      });
+
+      setLiveTests((data?.live || []).map(mapAssessment));
+      setUpcomingTests((data?.upcoming || []).map(mapAssessment));
+      setPastTests((data?.past || []).map(mapAssessment));
+
+      console.log("Live:", data?.live);
+      console.log("Upcoming:", data?.upcoming);
+      console.log("Past:", data?.past);
+    } catch (error) {
+      console.error("Failed to fetch assessments:", error);
+
+      setLiveTests([]);
+      setUpcomingTests([]);
+      setPastTests([]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  fetchAssessments();
+}, []);
 
   return (
     <AssessmentContext.Provider value={{ liveTests, upcomingTests, pastTests, isLoading }}>

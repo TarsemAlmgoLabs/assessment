@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { useManageAssessment } from "../context/manageAssessment.context";
 import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 // =====================================================
 // DUMMY ASSESSMENT
@@ -45,6 +46,10 @@ export default function ManageAssessment() {
 
   const { assessment, isLoading, updateSchedule, cancelAssessment } = useManageAssessment();
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const jobId = searchParams.get("jobId");
+  const assessmentId = searchParams.get("assessmentId");
   
   const [startDate, setStartDate] = useState(
     assessment?.startDate || ""
@@ -98,13 +103,12 @@ export default function ManageAssessment() {
     setSaving(true);
     
     // API Call through Context
-    const success = await updateSchedule({
-      ...assessment,
+    const success = await updateSchedule(
+      assessmentId,
+      jobId,
       startDate,
-      startTime,
       endDate,
-      endTime,
-    });
+    );
 
     setSaving(false);
     
@@ -121,7 +125,7 @@ export default function ManageAssessment() {
     setShowCancelModal(false);
     
     // API Call through Context
-    const success = await cancelAssessment();
+    const success = await cancelAssessment(assessmentId, jobId);
     
     if(success) {
        setCancelled(true); 
