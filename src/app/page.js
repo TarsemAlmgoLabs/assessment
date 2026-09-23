@@ -74,10 +74,10 @@ export default function Home() {
   }
 
   // Authentication fail
-  if (authenticated === false) {
-    window.location.href = "https://vestaff.com/auth/login";
-    return null;
-  }
+  // if (authenticated === false) {
+  //   // window.location.href = "https://vestaff.com/auth/login";
+  //   return null;
+  // }
 
   return <CandidateAssessments />;
 }
