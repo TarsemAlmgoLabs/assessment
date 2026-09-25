@@ -209,9 +209,8 @@ export const ResultProvider = ({ children }) => {
           ),
 
           selectedAnswer:
-            selectedIndex === -1
-              ? null
-              : item.options?.[selectedIndex]?.text || null,
+            item.options?.[item.option_marked]?.text || null,
+            
 
           correctAnswer:
             item.options?.[item.correct_option_index]?.text || null,
