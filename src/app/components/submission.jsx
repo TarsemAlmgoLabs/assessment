@@ -1465,7 +1465,7 @@ function QuestionResult({
       } ${
         isCorrect
           ? "border-emerald-400/20"
-          : isSkipped
+          : isSkipped == -1
             ? "border-yellow-400/20"
             : "border-red-400/20"
       }`}
@@ -1480,7 +1480,7 @@ function QuestionResult({
           className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-xs font-bold ${
             isCorrect
               ? "bg-emerald-400/10 text-emerald-500"
-              : isSkipped
+              : isSkipped == -1
                 ? "bg-yellow-400/10 text-yellow-500"
                 : "bg-red-400/10 text-red-500"
           }`}
@@ -1491,23 +1491,44 @@ function QuestionResult({
 
         <div className="min-w-0 flex-1">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-            <h4
-              className={`text-sm font-semibold leading-6 sm:text-base ${
-                isLight ? "text-slate-800" : "text-slate-200"
-              }`}
-            >
-              {question.question}
-            </h4>
-            {question.code &&
-              <div className="w-full max-w-4xl mx-auto rounded-xl border border-gray-700 bg-[#0d1117] overflow-hidden shadow-lg">
-                {/* Code */}
-                <pre className="p-5 overflow-x-auto text-sm leading-6 text-gray-200 font-mono">
-                  <code>
-                    {question.code}
-                  </code>
-                </pre>
-              </div>
-            }
+            {/* <div className="">
+              <h4
+                className={`text-sm font-semibold leading-6 sm:text-base ${
+                  isLight ? "text-slate-800" : "text-slate-200"
+                }`}
+              >
+                {question.question}
+              </h4>
+              
+              {question.code &&
+                <div className="w-full max-w-4xl mx-auto rounded-xl border border-gray-700 bg-[#0d1117] overflow-hidden shadow-lg">
+                  
+                  <pre className="p-5 overflow-x-auto text-sm leading-6 text-gray-200 font-mono">
+                    <code>
+                      {question.code}
+                    </code>
+                  </pre>
+                </div>
+              }
+            </div> */}
+
+            <div className="flex flex-col gap-4">
+              <h4
+                className={`text-sm font-semibold leading-6 sm:text-base ${
+                  isLight ? "text-slate-800" : "text-slate-200"
+                }`}
+              >
+                {question.question}
+              </h4>
+
+              {question.code && (
+                <div className="w-full rounded-xl border border-gray-700 bg-[#0d1117] overflow-hidden shadow-lg">
+                  <pre className="p-5 overflow-x-auto text-sm leading-6 text-gray-200 font-mono whitespace-pre">
+                    <code>{question.code}</code>
+                  </pre>
+                </div>
+              )}
+            </div>
 
             {/* Report */}
             <button
@@ -1611,14 +1632,14 @@ function QuestionResult({
         className={`border-t px-5 py-3 text-xs font-semibold sm:px-6 ${
           isCorrect
             ? "border-emerald-400/10 bg-emerald-400/[0.04] text-emerald-500"
-            : isSkipped
+            : isSkipped == -1
               ? "border-yellow-400/10 bg-yellow-400/[0.04] text-yellow-500"
               : "border-red-400/10 bg-red-400/[0.04] text-red-500"
         }`}
       >
         {isCorrect
           ? "You selected the correct answer."
-          : isSkipped
+          : isSkipped == -1
             ? "You did not answer this question."
             : "Your selected answer was incorrect."}
       </div>
