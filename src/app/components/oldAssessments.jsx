@@ -124,7 +124,7 @@ export default function AssessmentHistory() {
   useEffect(el=>{
     fetchHistory();
   }, [])
-  if (loading || !assessmentHistory) {
+  if (loading) {
     return (
       <div className="min-h-screen bg-[#080d13] flex items-center justify-center text-cyan-400">
         Loading History...
