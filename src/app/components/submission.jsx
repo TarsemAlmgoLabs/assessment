@@ -1205,7 +1205,7 @@ export default function AssessmentResult() {
 
           <div className="space-y-5">
             {result.questions.map((question,index) => {
-              const isSkipped = !question.selectedAnswer;
+              const isSkipped = question.selectedAnswer;
 
               const isCorrect =
                 !isSkipped==-1 &&
