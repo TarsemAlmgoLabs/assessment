@@ -1208,7 +1208,7 @@ export default function AssessmentResult() {
               const isSkipped = question.selectedAnswer;
 
               const isCorrect =
-                !isSkipped==-1 &&
+                isSkipped !==-1 &&
                 question.selectedAnswer === question.correctAnswer;
 
               return (
