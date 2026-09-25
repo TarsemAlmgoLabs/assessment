@@ -197,6 +197,8 @@ export const QportalProvider = ({ children }) => {
         );
       setLoading(false);
         console.log("apicall",response.data.status)
+        setQuestions(questions=> [])
+
       return response.data.status;
     }catch(error){
 
