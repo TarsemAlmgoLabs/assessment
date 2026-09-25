@@ -1922,14 +1922,14 @@ useEffect(() => {
             </div>
 
             <div className="min-w-0">
-              <h1
+              {/* <h1
                 className={`
                   truncate text-xs font-bold sm:text-sm lg:text-base
                   ${isDark ? "text-white" : "text-slate-900"}
                 `}
               >
-                JavaScript Skill Assessment
-              </h1>
+                JavaScript Skill Assessment */}
+              {/* </h1> */}
 
               <p
                 className={`

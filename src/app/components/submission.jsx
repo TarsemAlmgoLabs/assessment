@@ -1204,7 +1204,7 @@ export default function AssessmentResult() {
           </div>
 
           <div className="space-y-5">
-            {result.questions.map((question) => {
+            {result.questions.map((question,index) => {
               const isSkipped = !question.selectedAnswer;
 
               const isCorrect =
@@ -1213,6 +1213,7 @@ export default function AssessmentResult() {
 
               return (
                 <QuestionResult
+                  index={index}
                   key={question.id}
                   question={question}
                   isCorrect={isCorrect}
@@ -1447,6 +1448,7 @@ export default function AssessmentResult() {
 ========================================================= */
 
 function QuestionResult({
+  index,
   question,
   isCorrect,
   isSkipped,
@@ -1483,7 +1485,8 @@ function QuestionResult({
                 : "bg-red-400/10 text-red-500"
           }`}
         >
-          {question.id}
+          {/* {question.id} */}
+          {index+1}
         </div>
 
         <div className="min-w-0 flex-1">
