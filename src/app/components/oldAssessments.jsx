@@ -170,7 +170,7 @@ export default function AssessmentHistory() {
             />
 
             <span className="text-xs font-semibold text-slate-400">
-              {assessmentHistory.length} Assessments
+              {assessmentHistory?.length} Assessments
             </span>
           </div>
 
@@ -215,7 +215,7 @@ export default function AssessmentHistory() {
               </p>
 
               <p className="mt-1 text-xl font-black text-white">
-                {assessmentHistory.length}
+                {assessmentHistory?.length}
               </p>
             </div>
 
@@ -229,7 +229,7 @@ export default function AssessmentHistory() {
 
         <div className="grid gap-4 lg:grid-cols-2">
 
-          {assessmentHistory.map((assessment,index) => (
+          {assessmentHistory?.map((assessment,index) => (
             <AssessmentCard
               key={index}
               assessment={assessment}
