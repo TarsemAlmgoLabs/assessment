@@ -209,7 +209,7 @@ export const ResultProvider = ({ children }) => {
           ),
 
           selectedAnswer:
-            item.options?.[item.option_marked]?.text || null,
+            item.options?.[item.option_marked]?.text || -1,
             
 
           correctAnswer:
