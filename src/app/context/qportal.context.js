@@ -170,9 +170,18 @@ export const QportalProvider = ({ children }) => {
 
         return Questions;
     } catch (error) {
-        console.error("Failed to load assessment:", error);
+        // console.error("Failed to load assessment:", error);
+        // throw error;
+         if (
+            error.response?.status === 403 &&
+            error.response?.data?.detail?.error === "assessment_limit_exceeded"
+          ) {
+            alert("Your subscription limit has been exhausted.");
+            window.location.href = "/";
+            return;
+          }
 
-        throw error;
+          console.error(error);
     } finally {
         setLoading(false);
     }
