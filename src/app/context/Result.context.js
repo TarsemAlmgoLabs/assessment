@@ -203,7 +203,7 @@ export const ResultProvider = ({ children }) => {
           inx: index+1,
 
           question: item.statement,
-
+          code : item.code_snippet,
           options: (item.options || []).map(
             (option) => option.text
           ),

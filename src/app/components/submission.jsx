@@ -1498,6 +1498,16 @@ function QuestionResult({
             >
               {question.question}
             </h4>
+            {question.code &&
+              <div className="w-full max-w-4xl mx-auto rounded-xl border border-gray-700 bg-[#0d1117] overflow-hidden shadow-lg">
+                {/* Code */}
+                <pre className="p-5 overflow-x-auto text-sm leading-6 text-gray-200 font-mono">
+                  <code>
+                    {question.code}
+                  </code>
+                </pre>
+              </div>
+            }
 
             {/* Report */}
             <button
